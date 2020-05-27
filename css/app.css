@@ -1,0 +1,125 @@
+/* color palette */
+.top-color {
+  background-color: #00bcd4;
+}
+
+.sec-color {
+  background-color: #b2ebf2;
+}
+
+.third-color {
+  background-color: #ff5722;
+}
+
+.last-color {
+  background-color: #dd2c00;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* navigation */
+.fixed-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%; 
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.5);
+  transition: 0.6s ease;
+  z-index: 3;
+}
+
+nav {
+  height: 70px;
+  z-index: 5;
+}
+
+.nav-brand-txt {
+  border:5px solid #ff5622bb;
+  margin: 0 auto;
+}
+
+.search-input:focus {
+  border: 2px solid #ff5722;
+  box-shadow: none;
+}
+
+.search-btn {
+  border: 2px solid #ff5722;
+  color:#ff5722;
+}
+
+.search-btn:focus {
+  box-shadow: 2px #ff5722;
+}
+
+.search-btn:hover {
+  background-color: #ff5722;
+  box-shadow: none;
+  border: 2px solid #ff5722;
+}
+
+
+@media only screen and (max-width: 600px) {
+  .navigation > .collapse{
+    background-color: white;
+    padding: .5rem;
+  }
+}
+
+
+@media only screen and (max-width: 768px) {
+  .navigation > .collapse{
+    background-color: white;
+    padding: .5rem;
+  }
+} 
+
+@media only screen and (max-width: 992px) {
+  .navigation > .collapse{
+    background-color: white;
+    padding: .5rem;
+  }
+} 
+
+/* // navigation */
+
+/* carousel */
+.carousel-inner .carousel-item {
+  height: 450px;
+}
+
+.carousel-item img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-height: 450px;
+}
+/* 
+.carousel-inner,.carousel-control-prev,.carousel-control-next,.carousel-item {
+  z-index: 0 !important;
+} */
+
+@media (max-width: 576px) {
+  .carousel .carousel-item {
+      height: 300px;
+  }
+
+  .carousel-item img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      min-height: 300px;
+  }
+
+  /* .carousel-caption {
+      font-size: 10px;
+      font-weight: bold !important;
+      height: 2rem;
+      margin-bottom: 5rem
+  } */
+
+}
+
+/* //carousel */
