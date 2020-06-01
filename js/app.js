@@ -35,10 +35,23 @@ includeHTML();
 $(window).scroll(function(){
   if ($(window).scrollTop() >= 490) {
       $('nav').addClass('fixed-header');
-      $('nav ').addClass('top-color');
+      $('nav ').addClass('sec-color');
+      $('nav .navbar-brand span').removeClass('nav-brand-txt');
+      $('.search-form input').removeClass('seacrh-input');
+      $('.search-form button').removeClass('search-btn');
+      $('nav .navbar-brand span').addClass('nav-brand-txt-after');
+      $('.search-form input').addClass('search-input-after');
+      $('.search-form button').addClass('search-btn-after');
+
   }
   else {
       $('nav').removeClass('fixed-header');
-      $('nav ').removeClass('top-color');
+      $('nav ').removeClass('sec-color');
+      $('nav .navbar-brand span').removeClass('nav-brand-txt-after');
+      $('nav .navbar-brand span').addClass('nav-brand-txt');
+      $('.search-form input').addClass('seacrh-input');
+      $('.search-form button').addClass('search-btn');
+      $('.search-form input').removeClass('search-input-after');
+      $('.search-form button').removeClass('search-btn-after');
   }
 });
