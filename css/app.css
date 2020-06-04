@@ -126,8 +126,13 @@ nav {
   }
 } 
 
+.navbar-nav .active {
+  border-bottom:2px solid #dd2c00;
+}
+
 /* // navigation */
 
+/* index page */
 /* carousel */
 .carousel-inner .carousel-item {
   height: 450px;
@@ -509,3 +514,4 @@ blockquote:nth-of-type(even) footer:after {
 }
 
 /* / .footer */
+
