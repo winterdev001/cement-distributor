@@ -255,35 +255,57 @@ class ImageViewer {
 
     hideLightbox() {
         $(this.lightboxImageSelector).removeClass('show');
-    }}
+    }
+}
 new ImageViewer('.image-viewer');
 
 // pricing
-$(document).ready(function() {
+$(document).ready(function () {
     $('.num-in span').click(function () {
         var $input = $(this).parents('.num-block').find('input.in-num');
-      if($(this).hasClass('minus')) {
-        var count = parseFloat($input.val()) - 1;
-        count = count < 10 ? 10 : count;
-        if (count < 2) {
-          $(this).addClass('dis');
+        if ($(this).hasClass('minus')) {
+            var count = parseFloat($input.val()) - 1;
+            count = count < 10 ? 10 : count;
+            if (count < 2) {
+                $(this).addClass('dis');
+            }
+            else {
+                $(this).removeClass('dis');
+            }
+            $input.val(count);
         }
         else {
-          $(this).removeClass('dis');
+            var count = parseFloat($input.val()) + 1
+            $input.val(count);
+            if (count > 1) {
+                $(this).parents('.num-block').find(('.minus')).removeClass('dis');
+            }
         }
-        $input.val(count);
-      }
-      else {
-        var count = parseFloat($input.val()) + 1
-        $input.val(count);
-        if (count > 1) {
-          $(this).parents('.num-block').find(('.minus')).removeClass('dis');
-        }
-      }
-      
-      $input.change();
-      return false;
+
+        $input.change();
+        return false;
     });
-    
-  });
+
+});
 // /pricing
+
+// broad product description
+var tabs = document.getElementById('icetab-container').children;
+var tabcontents = document.getElementById('icetab-content').children;
+
+var myFunction = function () {
+    var tabchange = this.mynum;
+    for (var int = 0; int < tabcontents.length; int++) {
+        tabcontents[int].className = ' tabcontent';
+        tabs[int].className = ' icetab';
+    }
+    tabcontents[tabchange].classList.add('tab-active');
+    this.classList.add('current-tab');
+}
+
+
+for (var index = 0; index < tabs.length; index++) {
+    tabs[index].mynum = index;
+    tabs[index].addEventListener('click', myFunction, false);
+}
+// / .broad description
