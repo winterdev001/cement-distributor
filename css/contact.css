@@ -1,0 +1,33 @@
+/* contact page */
+.contact-info {
+  background-color: #7a8e913b;
+  /* height: 50px;   */
+  min-width: 320px;
+  max-width: 850px;
+  padding: 10px;
+  margin: 0 auto;
+}
+
+.contact-info .card-body div {
+  display: inline-block;
+  padding: 10px;
+}
+
+.contact-info .card-body div i,p {
+  display: inline-block;
+}
+
+.contact-info .card-body div i {
+  font-size: 30px;
+}
+
+.contact-form-section {
+  min-width: 320px;
+  max-width: 850px;
+  padding: 10px;
+  margin: 0 auto;
+}
+
+.contact-btn:hover  {
+  background-color: #7a8e91ee;
+}

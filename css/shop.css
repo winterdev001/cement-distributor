@@ -1,0 +1,153 @@
+/* shop page */
+  .nav-brand {
+    color: black;
+    /* display: block; */
+    /* text-align: center; */
+    padding: 3px;
+  }
+
+  .filter-nav {
+      height: 3rem !important;
+  }
+
+  .filter-items .filter-item {
+    display: inline-block;
+    padding: 5px;
+    margin-left: auto;
+  }  
+
+  .filter-item {
+    float: right;
+  }
+
+  .filter-items .filter-item select {
+    height: 25px;
+    border-radius: 3px;
+  }
+
+  .filter-section {
+    height: 60px;    
+    padding: 1rem !important;
+    width: 82%;
+  }
+
+  .filter-section .row .col-md-9 select {
+    float: right;
+    border-radius: 3px;
+  }
+
+  @media only screen and (max-width: 600px)  { 
+    .filter-section {
+      height: 85px;
+      /* display:flex;
+      align-content: center; */
+      padding: 1rem !important;
+      width: 90%;
+    }
+
+    .filter-section .row .col-md-9 select {
+      margin-top: .5rem;
+      float: left;
+    }   
+    
+    
+  }
+    
+  /* pagination */
+  @import url("https://fonts.googleapis.com/css2?family=Nunito&display=swap");
+  /* * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }   */
+  
+  .pagination-section {
+    margin: 5rem 0;
+    display: grid;
+    place-items: center;
+  }
+  
+  .pagination {
+    list-style-type: none;
+    display: flex;
+  }
+  
+  .pagination a {
+    text-decoration: none;
+    background: #ff5722;
+    color: #fff;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ff5722;
+  }
+  
+  .first a {
+    display: inline-block;
+    transition: all 300ms linear;
+  }
+  
+ 
+  
+  @keyframes move {
+    0% {
+      transform: translateX(0);
+    }
+    20% {
+      transform: translateX(-100px);
+    }
+    40% {
+      transform: translateX(100px);
+    }
+    60% {
+      transform: translateX(-50px);
+    }
+    80% {
+      transform: translateX(50px);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+  
+  /* / .pagination */
+
+
+/* .links >.link {
+  display: inline-block;
+}
+
+.link  {
+  margin-left: auto;
+}
+ 
+@media only screen and (max-width: 600px)  {
+  .filter-nav{
+    flex-direction: column;
+  } 
+  .links >.link {
+    display: flex;
+    
+  }
+  .link {
+    align-self: start;
+  }
+
+  .link a input {
+    width: 100%;
+  }
+  .pagination-section {
+    width: 100%;
+  }
+} */
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
