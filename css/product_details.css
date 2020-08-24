@@ -172,12 +172,12 @@
 }
 
 .price-tag {
-  color: #ff5722;
+  color: #00c292;
 }
 
 .price-tags {
-  color:#ff5722 !important;
-  /* border-bottom:2px solid #ff5722 !important; */
+  color:#00c292 !important;
+  /* border-bottom:2px solid #00c292 !important; */
   padding: .5rem;
 }
 
@@ -218,7 +218,7 @@
 }
 
 .skin-6 .num-in span:hover {
-	color: #ff5722 !important;
+	color: #00c292 !important;
 }
 
 .skin-6 .num-in input {
@@ -230,12 +230,12 @@
 }
 
 .add-order-btn {
-  border: 2px solid #ff5722;
+  border: 2px solid #00c292;
 
 }
 
 .add-order-btn:hover {
-  background-color: #ff5722;
+  background-color: #00c292;
   color: white;
 }
 
@@ -386,11 +386,11 @@ body {
   /* margin: 40px; */
   /* margin-left: auto; */
   /* margin-right: auto; */
-  /* border: 2px solid #ff5722; */
+  /* border: 2px solid #00c292; */
   height: auto;
 }
 .title {
-  color: #ff5722;
+  color: #00c292;
   text-align: center;
   letter-spacing: 14px;
   text-transform: uppercase;
@@ -399,26 +399,26 @@ body {
 }
 .tabcontent {
   padding: 40px;
-  /* border: 2px solid #ff5722; */
+  /* border: 2px solid #00c292; */
 }
 .icetab {
 	padding: 3px;
 	text-transform: uppercase;
   letter-spacing: 2px;
   color: black;
-  /* border: 2px solid #ff5722; */
+  /* border: 2px solid #00c292; */
 }
 .current-tab { 
-  background: #ff56228f;
+  background: #00c292;
   color: white;
 }
 
 .add-review-btn {
   color: black;
-  border: 2px solid #ff5722;
+  border: 2px solid #00c292;
 }
 .add-review-btn:hover {
-  background-color: #ff5722;
+  background-color: #00c292;
   color: #fff;
 }
 /* / .broad description */

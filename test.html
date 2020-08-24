@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<script src="js/angular.min.js"></script>
+<body>
+
+<p>Try to change the names.</p>
+
+<div ng-app="myApp" ng-controller="myCtrl">
+
+<!-- First Name: <input type="text" ng-model="firstName"><br>
+Last Name: <input type="text" ng-model="lastName"><br> -->
+<br>
+<div data-ng-repeat="data in products">
+  {{data.product_name}}
+</div>
+<hr>
+<div>
+  show
+  {{greeting}}
+</div>
+
+</div>
+
+<script>
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope,$http) {
+  $scope.getProducts = () => {
+    $http.get("api/getProducts.php").then((Response) => {
+      $scope.products = Response.data;
+      // console.log(Response)
+    })
+  }
+  $scope.greeting="heloo";
+
+  // $scope.showProduct = (product) => {
+  //   let show_products = {
+  //     method: 'POST',
+  //     url: 'api/showProduct.php',
+  //     data: {
+  //       id: 1
+  //     }
+  //   };
+  //   $http(show_products).then((res) => {
+  //     data = res.data;
+  //     // console.log(data[0].fineness);
+  //     $scope.show_fineness = data[0].fineness;
+  //     $scope.show_strength = data[0].compressive_strength;
+  //     $scope.show_color = data[0].color;
+  //     $scope.show_weight = data[0].weight;
+  //     $scope.show_application = data[0].application;
+  //     $scope.show_packaging_type = data[0].packaging_type;
+  //   });
+
+  //   $scope.show_product_name = product.product_name;
+  //   $scope.show_quantity = product.quantity;
+  //   $scope.show_amount = product.amount;
+  //   $scope.show_manufacturer = product.manufacturer;
+  //   $scope.show_created_at = product.created_at;
+  //   $scope.show_product_id = product.id;
+  //   // alert(product.product_name);
+  //   console.log('okay');
+  // }
+
+  $scope.getProducts();
+});
+</script>
+
+</body>
+</html>
