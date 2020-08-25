@@ -15,9 +15,10 @@
   $application = $product->usage;
   $packaging = $product->packaging;
   $manufacturer = $product->manufacturer;
+  $image = $product->image;
 
-  $sql = "INSERT INTO products (product_name,quantity,amount,manufacturer,category_id)
-   VALUES ('".$product_name."','".$quantity."','".$amount."','".$manufacturer."','".$category_id."')";
+  $sql = "INSERT INTO products (product_name,quantity,amount,manufacturer,category_id,image)
+   VALUES ('".$product_name."','".$quantity."','".$amount."','".$manufacturer."','".$category_id."','".$image."')";
   $result = mysqli_query($conn,$sql);
   
   if ($result) {

@@ -48,13 +48,13 @@
             <ul class="side-nav-links">
               <li><a href="dash.html">Dashboard</a></li>
               <li><a href="products.html" class="active">Products</a></li>
-              <li><a>Roadmap</a></li>
+              <!-- <li><a>Roadmap</a></li>
               <li><a>Milestones</a></li>
               <li><a>Tickets</a></li>
               <li><a>GitHub</a></li>
               <li><span>Other</span></li>
               <li><a>Search</a></li>
-              <li><a>Settings</a></li>
+              <li><a>Settings</a></li> -->
               <li><a>Logout</a></li>
             </ul>
 
@@ -174,7 +174,7 @@
             <div>
               <div class="card mt-2 mb-3" style="border-left: 3px solid #00c292;">
                 <div class="card-body">
-                  <form>
+                  <form id="dimage"> 
                     <div class="tab-content" id="nav-tabContent" ng-show="!product_specification">
                       <!-- product-details -->
                       <strong>Product Details</strong>
@@ -315,6 +315,13 @@
                             </div>
                           </div>
                         </div>
+                        <div class="col-md-6">
+                          <div class="input-group">
+                            <div class="form-group col-12">
+                              <input type="file" name="img" ng-model="img" id="img">
+                            </div>
+                          </div>
+                        </div>
 
                         <div class="next ml-auto">
                           <button class="btn btn-grin" ng-click="product_specification=!product_specification"
@@ -323,9 +330,9 @@
                         </div>
                       </div>
                     </div>
-                    <div class="addedProductdetails bg-light container mt-3">
+                    <!-- <div class="addedProductdetails bg-light container mt-3">
                       <pre> {{product | json}} </pre>
-                    </div>
+                    </div> -->
                     <!-- product sepcification -->
                   </form>
                 </div>
@@ -357,7 +364,7 @@
         <div class="modal-body">
           <div class="row">
             <div class="col-md-5">
-              <img src="../images/cart.jpg" width="300" alt="card-img">
+              <img ng-src=" ../images/products/{{show_image}} " on-error="../images/err.png" width="300" alt="card-img">
             </div>
             <div class="col-md-7">
               <p class="card-text"><strong>Name : {{show_product_name}}</strong></p>
@@ -542,6 +549,13 @@
                             </div>
                           </div>
                         </div>
+                        <!-- <div class="col-md-6">
+                          <div class="input-group">
+                            <div class="form-group col-12">
+                              <input type="file" name="img" ng-model="img">
+                            </div>
+                          </div>
+                        </div> -->
 
                         <div class="next ml-auto">
                           <button class="btn btn-grin" ng-click="product_specification=!product_specification"
@@ -550,9 +564,9 @@
                         </div>
                       </div>
                     </div>
-                    <div class="addedProductdetails bg-light container mt-3">
+                    <!-- <div class="addedProductdetails bg-light container mt-3">
                       <pre> {{product | json}} </pre>
-                    </div>
+                    </div> -->
                     <!-- product sepcification -->
                   </form>
                 </div>
@@ -618,6 +632,7 @@
       }
 
       $scope.addProduct = (product) => {
+        var fileName = document.getElementById('img').files[0].name;
         info_product = {
           method: 'POST',
           url: '../api/addProduct.php',
@@ -632,10 +647,13 @@
             'weight': product.weight,
             'usage': product.product_usage,
             'packaging': product.product_pkging,
-            'manufacturer': product.manufacturer
+            'manufacturer': product.manufacturer,
+            'image':fileName
 
           }
-        };
+        };       
+            
+          // console.log(fileName);
         // console.log(product.product_cat.id);
         let post_product = $http(info_product);
         post_product.then((response) => {
@@ -693,6 +711,7 @@
         $scope.show_manufacturer = product.manufacturer;
         $scope.show_created_at = product.created_at;
         $scope.show_product_id = product.id;
+        $scope.show_image = product.image;
         // alert(product.product_name);
       }
 
@@ -840,6 +859,17 @@
       $scope.getProducts();
       $scope.getCategories();
     });
+
+    app.directive('onError', function () {
+      return {
+        restrict: 'A',
+        link: function (scope, element, attr) {
+          element.on('error', function () {
+            element.attr('src', attr.onError);
+          })
+        }
+      }
+    })
   </script>
   <script>
     // $(document).ready(function(){

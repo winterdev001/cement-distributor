@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="css/shop.css">
 </head>
 
-<body>
+<body ng-app="shop" ng-controller="shopCtrl">
   <header>
     <div include-html="inc/navigation.html"></div>
   </header>
@@ -96,182 +96,23 @@
     <div class="card  mb-5 mt-5">
       <div class="card-body">
         <div class="row row-cols-1 row-cols-md-4">
-          <div class="col mb-4">
-            <a href="product_details.html" class="text-decoration-none ">
+          <div class="col mb-4" ng-repeat="product in products | orderBy:'-created_at'">
+            <a href="" class="text-decoration-none " ng-click="toShowProduct(product.id)">
               <div class="card latest-product-card">
-                <img src="images/cart.jpg" class="card-img-top" alt="...">
+                <div>
+                  <!-- <img ng-src="images/products/{{product.image}}" class="card-img-top" alt="..."> -->
+                  <img ng-src=" images/products/{{product.image}} " on-error="images/err.png" class="card-img-top"
+                    alt="...">
+                </div>
+
                 <div class="card-body">
-                  <h5 class="card-title text-center text-dark">Product 1</h5>
-                  <p class="card-text last-color-cl text-center">40,000 Rwf</p>
+                  <h5 class="card-title text-center text-dark">{{product.product_name}}</h5>
+                  <p class="card-text last-color-cl text-center">{{product.amount}} Rwf</p>
                 </div>
               </div>
             </a>
           </div>
-          <div class="col mb-4">
-            <a href="" class="text-decoration-none ">
-              <div class="card latest-product-card">
-                <img src="images/cart.jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title text-center text-dark">Product 2</h5>
-                  <p class="card-text last-color-cl text-center">40,000 Rwf</p>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mb-4">
-            <a href="" class="text-decoration-none ">
-              <div class="card latest-product-card">
-                <img src="images/cart.jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title text-center text-dark">Product 3</h5>
-                  <p class="card-text last-color-cl text-center">40,000 Rwf</p>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mb-4">
-            <a href="" class="text-decoration-none ">
-              <div class="card latest-product-card">
-                <img src="images/cart.jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title text-center text-dark">Product 4</h5>
-                  <p class="card-text last-color-cl text-center">40,000 Rwf</p>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mb-4">
-            <a href="" class="text-decoration-none ">
-              <div class="card latest-product-card">
-                <img src="images/cart.jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title text-center text-dark">Product 5</h5>
-                  <p class="card-text last-color-cl text-center">40,000 Rwf</p>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mb-4">
-            <a href="" class="text-decoration-none ">
-              <div class="card latest-product-card">
-                <img src="images/cart.jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title text-center text-dark">Product 6</h5>
-                  <p class="card-text last-color-cl text-center">40,000 Rwf</p>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mb-4">
-            <a href="" class="text-decoration-none ">
-              <div class="card latest-product-card">
-                <img src="images/cart.jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title text-center text-dark">Product 7</h5>
-                  <p class="card-text last-color-cl text-center">40,000 Rwf</p>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mb-4">
-            <a href="" class="text-decoration-none ">
-              <div class="card latest-product-card">
-                <img src="images/cart.jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title text-center text-dark">Product 8</h5>
-                  <p class="card-text last-color-cl text-center">40,000 Rwf</p>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mb-4">
-            <a href="product_details.html" class="text-decoration-none ">
-              <div class="card latest-product-card">
-                <img src="images/cart.jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title text-center text-dark">Product 1</h5>
-                  <p class="card-text last-color-cl text-center">40,000 Rwf</p>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mb-4">
-            <a href="" class="text-decoration-none ">
-              <div class="card latest-product-card">
-                <img src="images/cart.jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title text-center text-dark">Product 2</h5>
-                  <p class="card-text last-color-cl text-center">40,000 Rwf</p>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mb-4">
-            <a href="" class="text-decoration-none ">
-              <div class="card latest-product-card">
-                <img src="images/cart.jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title text-center text-dark">Product 3</h5>
-                  <p class="card-text last-color-cl text-center">40,000 Rwf</p>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mb-4">
-            <a href="" class="text-decoration-none ">
-              <div class="card latest-product-card">
-                <img src="images/cart.jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title text-center text-dark">Product 4</h5>
-                  <p class="card-text last-color-cl text-center">40,000 Rwf</p>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mb-4">
-            <a href="" class="text-decoration-none ">
-              <div class="card latest-product-card">
-                <img src="images/cart.jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title text-center text-dark">Product 5</h5>
-                  <p class="card-text last-color-cl text-center">40,000 Rwf</p>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mb-4">
-            <a href="" class="text-decoration-none ">
-              <div class="card latest-product-card">
-                <img src="images/cart.jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title text-center text-dark">Product 6</h5>
-                  <p class="card-text last-color-cl text-center">40,000 Rwf</p>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mb-4">
-            <a href="" class="text-decoration-none ">
-              <div class="card latest-product-card">
-                <img src="images/cart.jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title text-center text-dark">Product 7</h5>
-                  <p class="card-text last-color-cl text-center">40,000 Rwf</p>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mb-4">
-            <a href="" class="text-decoration-none ">
-              <div class="card latest-product-card">
-                <img src="images/cart.jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title text-center text-dark">Product 8</h5>
-                  <p class="card-text last-color-cl text-center">40,000 Rwf</p>
-                </div>
-              </div>
-            </a>
-          </div>
+
         </div>
         <!-- pagination -->
         <section>
@@ -304,6 +145,48 @@
   <!-- / .footer -->
   <!-- scripts -->
   <script src="js/app.js"></script>
+  <script src="js/angular.min.js"></script>
+  <script>
+    var app = angular.module('shop', []);
+
+    app.controller('shopCtrl', function ($scope, $http, $window) {
+      $scope.getProducts = () => {
+        $http.get("api/getProducts.php").then((Response) => {
+          $scope.products = Response.data;
+          // console.log(Response.data)     
+        })
+      }
+
+      $scope.toShowProduct = (id) => {
+        // $window.location.href = 'product_details.html';
+        // alert('hello')
+        if (localStorage.getItem('id') == null) {
+          var addId = localStorage.setItem('id', id);
+          $window.location.href = 'product_details.html';
+        } else {
+          localStorage.removeItem('id');
+          var addId = localStorage.setItem('id', id)
+          $window.location.href = 'product_details.html';
+          var getId = localStorage.getItem('id');
+          console.log(getId);
+        }
+      }
+
+
+      $scope.getProducts();
+    })
+
+    app.directive('onError', function () {
+      return {
+        restrict: 'A',
+        link: function (scope, element, attr) {
+          element.on('error', function () {
+            element.attr('src', attr.onError);
+          })
+        }
+      }
+    })
+  </script>
   <style>
     /* back to top button */
 

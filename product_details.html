@@ -25,7 +25,7 @@
     crossorigin="anonymous"></script>
   <!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
   <link rel="stylesheet" href="css/app.css">
-  <link rel="stylesheet" href="css/product_details.css">  
+  <link rel="stylesheet" href="css/product_details.css">
 </head>
 
 <body>
@@ -38,23 +38,23 @@
       <ol class="breadcrumb ">
         <li class="breadcrumb-item"><a href="index.html">Home</a></li>
         <li class="breadcrumb-item"><a href="shop.html">Products</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Product name</li>
+        <li class="breadcrumb-item active" aria-current="page" id="pname"></li>
       </ol>
     </nav>
   </div>
   <!-- / .breadcrumbs -->
-  <div >
+  <div>
     <!-- details section -->
-    <div class="container">
+    <div class="container" ng-app="pdetails" ng-controller="pdetailsCtrl">
       <div class=" card product-detail mb-5">
         <div class="row  card-body">
           <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 product-detail-img-sect">
             <div class=" product_img">
               <div class="image-viewer">
                 <div class="main-image">
-                  <img src="images/cart.jpg" />
+                  <img ng-src=" images/products/{{show_image}} " on-error="images/err.png" />
                 </div>
-                <div class="secondary-images">
+                <!-- <div class="secondary-images">
                   <div class="secondary-image">
                     <img src="images/house2.jpg" />
                   </div>
@@ -67,7 +67,7 @@
                   <div class="secondary-image">
                     <img src="images/random.jpg" />
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
@@ -77,19 +77,18 @@
                 <div class="detail">
                   <div class="row">
                     <div class="col-md-9">
-                      <h1 class="detail-name"> {{greeting}} </h1>
+                      <h1 class="detail-name"> {{show_product_name}} </h1>
                     </div>
                     <div class="col-md-3">
-                      <a class="btn btn-light" href="">Go Back</a>
+                      <a class="btn btn-light" onclick="goBack()" href="">Go Back</a>
                     </div>
                   </div>
                   <p class="card-text">
-                    <span class="price-tags">{{show_amount}}</span>
+                    <span class="price-tags">{{show_amount}}Rwf</span>
                   </p>
                   <p class="detail-short-description">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus consequuntur ducimus laborum. Labore
-                    est, ullam a eos impedit sint laborum quos maxime ab ipsam hic suscipit commodi! Animi, magni?
-                    Dolorem?
+                    {{show_product_name}} is a sure and well tested product imported by kiku after being manufactured by
+                    {{show_manufacturer}}.
                   </p>
 
                 </div>
@@ -134,20 +133,20 @@
         <div id="icetab-content">
           <div class="tabcontent tab-active">
             <strong>Minum Order Quantity</strong> : <span>10 Package/Bags</span><br>
-            <strong>Price</strong> : <span>Rwf 40,000 per bag.</span><br>
+            <strong>Price</strong> : <span>Rwf {{show_amount}} per bag.</span><br>
             <strong>Payment method</strong> : <span>Cash, Credit Card</span><br>
             <strong>Payment ways</strong> : <span>Cash transfer/wire, Pay per delivery.</span>
           </div>
           <div class="tabcontent">
-            <strong>Fineness</strong> : <span>3800</span><br>
-            <strong>Compressive Strength</strong> : <span>53+ Megapascals (MPa )</span><br>
-            <strong>Color</strong> : <span>Dark Grey</span><br>
-            <strong>Weight</strong> : <span>50 Kilograms (kg)</span><br>
+            <strong>Fineness</strong> : <span>{{show_fineness}}</span><br>
+            <strong>Compressive Strength</strong> : <span>{{show_strength}}+ Megapascals (MPa )</span><br>
+            <strong>Color</strong> : <span>{{show_color}}</span><br>
+            <strong>Weight</strong> : <span>{{show_weight}}Kilograms (kg)</span><br>
             <strong>Cement Raw Material</strong> : <span>Other</span><br>
             <strong>Cement Type</strong> : <span>Other </span><br>
             <strong>Sand TypeNatural</strong> : <span>Sand</span><br>
             <strong>Hardening Feature</strong> : <span>Extra Rapid Hardening</span><br>
-            <strong>Product Strength Grade</strong> : <span>53+ mpa</span>
+            <strong>Product Strength Grade</strong> : <span>{{show_strength}}+ mpa</span>
           </div>
           <div class="tabcontent">
             <table class="table table-bordered">
@@ -157,7 +156,7 @@
                     <strong>Packaging Size</strong>
                   </td>
                   <td>
-                    50 Kgs
+                    {{show_weight}} Kgs
                   </td>
                 </tr>
                 <tr>
@@ -165,7 +164,7 @@
                     <strong>Usage/Application</strong>
                   </td>
                   <td>
-                    Civil Construction
+                    {{show_application}}
                   </td>
                 </tr>
                 <tr>
@@ -173,7 +172,7 @@
                     <strong>Color</strong>
                   </td>
                   <td>
-                    Dark Grey
+                    {{show_color}}
                   </td>
                 </tr>
                 <tr>
@@ -181,7 +180,7 @@
                     <strong>Compressive Strength</strong>
                   </td>
                   <td>
-                    53+ mpa
+                    {{show_strength}}+ mpa
                   </td>
                 </tr>
                 <tr>
@@ -189,7 +188,7 @@
                     <strong>Packaging Type</strong>
                   </td>
                   <td>
-                    PP Sack Bag
+                    {{show_packaging_type}}
                   </td>
                 </tr>
               </tbody>
@@ -270,149 +269,24 @@
           <div class="MultiCarousel" data-items="1,2,3,4" data-slide="1" id="MultiCarousel" data-interval="1000">
             <div class="MultiCarousel-inner">
               <div class="item card">
-                <img src="images/cart.jpg" class="card-img-top" alt="">
+                <img src="images/products/Phx-Green Bag Full-1200x1200.jpg" class="card-img-top" alt="">
                 <div class=" card-body">
-                  <h5 class="card-title text-center text-dark">Product</h5>
-                  <p class="card-text last-color-cl text-center">10,000 Rwf</p>
+                  <h5 class="card-title text-center text-dark">Ambuja Cement</h5>
+                  <p class="card-text last-color-cl text-center">18,000 Rwf</p>
                   <!-- <p>₹ 6000</p>
-<p>50% off</p> -->
+                  <p>50% off</p> -->
                 </div>
               </div>
               <div class="item card">
-                <img src="images/cart.jpg" class="card-img-top" alt="">
+                <img src="images/products/surebuild-bag-mock-up.png" class="card-img-top" alt="">
                 <div class="pad15 card-body">
-                  <h5 class="card-title text-center text-dark">Product</h5>
-                  <p class="card-text last-color-cl text-center">10,000 Rwf</p>
+                  <h5 class="card-title text-center text-dark">Surebuild</h5>
+                  <p class="card-text last-color-cl text-center">15,000 Rwf</p>
                   <!-- <p>₹ 6000</p> -->
                   <!-- <p>50% off</p> -->
                 </div>
               </div>
-              <div class="item card">
-                <img src="images/cart.jpg" class="card-img-top" alt="">
-                <div class="pad15 card-body">
-                  <h5 class="card-title text-center text-dark">Product</h5>
-                  <p class="card-text last-color-cl text-center">10,000 Rwf</p>
-                  <!-- <p>₹ 6000</p> -->
-                  <!-- <p>50% off</p> -->
-                </div>
-              </div>
-              <div class="item card">
-                <img src="images/cart.jpg" class="card-img-top" alt="">
-                <div class="pad15 card-body">
-                  <h5 class="card-title text-center text-dark">Product</h5>
-                  <p class="card-text last-color-cl text-center">10,000 Rwf</p>
-                  <!-- <p>₹ 6000</p> -->
-                  <!-- <p>50% off</p> -->
-                </div>
-              </div>
-              <div class="item card">
-                <img src="images/cart.jpg" class="card-img-top" alt="">
-                <div class="pad15 card-body">
-                  <h5 class="card-title text-center text-dark">Product</h5>
-                  <p class="card-text last-color-cl text-center">10,000 Rwf</p>
-                  <!-- <p>₹ 6000</p> -->
-                  <!-- <p>50% off</p> -->
-                </div>
-              </div>
-              <div class="item card">
-                <img src="images/cart.jpg" class="card-img-top" alt="">
-                <div class="pad15 card-body">
-                  <h5 class="card-title text-center text-dark">Product</h5>
-                  <p class="card-text last-color-cl text-center">10,000 Rwf</p>
-                  <!-- <p>₹ 6000</p> -->
-                  <!-- <p>50% off</p> -->
-                </div>
-              </div>
-              <div class="item card">
-                <img src="images/cart.jpg" class="card-img-top" alt="">
-                <div class="pad15 card-body">
-                  <h5 class="card-title text-center text-dark">Product</h5>
-                  <p class="card-text last-color-cl text-center">10,000 Rwf</p>
-                  <!-- <p>₹ 6000</p> -->
-                  <!-- <p>50% off</p> -->
-                </div>
-              </div>
-              <div class="item card">
-                <img src="images/cart.jpg" class="card-img-top" alt="">
-                <div class="pad15 card-body">
-                  <h5 class="card-title text-center text-dark">Product</h5>
-                  <p class="card-text last-color-cl text-center">10,000 Rwf</p>
-                  <!-- <p>₹ 6000</p> -->
-                  <!-- <p>50% off</p> -->
-                </div>
-              </div>
-              <div class="item card">
-                <img src="images/cart.jpg" class="card-img-top" alt="">
-                <div class="pad15 card-body">
-                  <h5 class="card-title text-center text-dark">Product</h5>
-                  <p class="card-text last-color-cl text-center">10,000 Rwf</p>
-                  <!-- <p>₹ 6000</p> -->
-                  <!-- <p>50% off</p> -->
-                </div>
-              </div>
-              <div class="item card">
-                <img src="images/cart.jpg" class="card-img-top" alt="">
-                <div class="pad15 card-body">
-                  <h5 class="card-title text-center text-dark">Product</h5>
-                  <p class="card-text last-color-cl text-center">10,000 Rwf</p>
-                  <!-- <p>₹ 6000</p> -->
-                  <!-- <p>50% off</p> -->
-                </div>
-              </div>
-              <div class="item card">
-                <img src="images/cart.jpg" class="card-img-top" alt="">
-                <div class="pad15 card-body">
-                  <h5 class="card-title text-center text-dark">Product</h5>
-                  <p class="card-text last-color-cl text-center">10,000 Rwf</p>
-                  <!-- <p>₹ 6000</p> -->
-                  <!-- <p>50% off</p> -->
-                </div>
-              </div>
-              <div class="item card">
-                <img src="images/cart.jpg" class="card-img-top" alt="">
-                <div class="pad15 card-body">
-                  <h5 class="card-title text-center text-dark">Product</h5>
-                  <p class="card-text last-color-cl text-center">10,000 Rwf</p>
-                  <!-- <p>₹ 6000</p> -->
-                  <!-- <p>50% off</p> -->
-                </div>
-              </div>
-              <div class="item card">
-                <img src="images/cart.jpg" class="card-img-top" alt="">
-                <div class="pad15 card-body">
-                  <h5 class="card-title text-center text-dark">Product</h5>
-                  <p class="card-text last-color-cl text-center">10,000 Rwf</p>
-                  <!-- <p>₹ 6000</p> -->
-                  <!-- <p>50% off</p> -->
-                </div>
-              </div>
-              <div class="item card">
-                <img src="images/cart.jpg" class="card-img-top" alt="">
-                <div class="pad15 card-body">
-                  <h5 class="card-title text-center text-dark">Product</h5>
-                  <p class="card-text last-color-cl text-center">10,000 Rwf</p>
-                  <!-- <p>₹ 6000</p> -->
-                  <!-- <p>50% off</p> -->
-                </div>
-              </div>
-              <div class="item card">
-                <img src="images/cart.jpg" class="card-img-top" alt="">
-                <div class="pad15 card-body">
-                  <h5 class="card-title text-center text-dark">Product</h5>
-                  <p class="card-text last-color-cl text-center">10,000 Rwf</p>
-                  <!-- <p>₹ 6000</p> -->
-                  <!-- <p>50% off</p> -->
-                </div>
-              </div>
-              <div class="item card">
-                <img src="images/cart.jpg" class="card-img-top" alt="">
-                <div class="pad15 card-body">
-                  <h5 class="card-title text-center text-dark">Product</h5>
-                  <p class="card-text last-color-cl text-center">10,000 Rwf</p>
-                  <!-- <p>₹ 6000</p> -->
-                  <!-- <p>50% off</p> -->
-                </div>
-              </div>
+
             </div>
             <button class="btn third-color leftLst">
               < </button>
@@ -422,10 +296,10 @@
       </div>
     </section>
     <!-- / .Related Products -->
-    <section ng-app="test" ng-controller="testCtrl">
+    <!-- <section ng-app="pdetails" ng-controller="pdetailsCtrl">
       <h3>hello</h3>
       <div>{{sayhi}}</div>
-    </section>
+    </section> -->
   </div>
 
 
@@ -443,14 +317,84 @@
   <script src="js/angular.min.js"></script>
   <!-- <script src="js/custom.js"></script> -->
   <script>
-    console.log('hello');
-    var app = angular.module('test',[]);
+    // console.log('hello');
+    var app = angular.module('pdetails', []);
 
-    app.controller('testCtrl', function($scope,$http){
-      $scope.sayhi = 'hello mehn';
+    app.controller('pdetailsCtrl', function ($scope, $http) {
+      var storedId = localStorage.getItem('id');
+      $scope.showProduct = () => {
+
+        let show_products = {
+          method: 'POST',
+          url: 'api/product_details.php',
+          data: {
+            id: storedId
+          }
+        };
+        $http(show_products).then((res) => {
+          data = res.data;
+          console.log(res.data);
+          $scope.show_fineness = data[0].fineness;
+          $scope.show_strength = data[0].compressive_strength;
+          $scope.show_color = data[0].color;
+          $scope.show_weight = data[0].weight;
+          $scope.show_application = data[0].application;
+          $scope.show_packaging_type = data[0].packaging_type;
+          $scope.show_product_name = data[0].product_name;
+          $scope.show_quantity = data[0].quantity;
+          $scope.show_amount = data[0].amount;
+          $scope.show_manufacturer = data[0].manufacturer;
+          $scope.show_product_id = data[0].id;
+          $scope.show_image = data[0].image;
+          $('#pname').html($scope.show_product_name);
+
+        });
+
+      }
+
+      $scope.showProduct();
+
     });
-    
+
+    app.directive('onError', function () {
+      return {
+        restrict: 'A',
+        link: function (scope, element, attr) {
+          element.on('error', function () {
+            element.attr('src', attr.onError);
+          })
+        }
+      }
+    })
+
   </script>
+  <!-- <script>
+    var app = angular.module('pname', []);
+
+    app.controller('pnameCtrl', function ($scope, $http) {
+      var storedId = localStorage.getItem('id');
+      $scope.showProduct = () => {
+
+        let show_products = {
+          method: 'POST',
+          url: 'api/product_details.php',
+          data: {
+            id: storedId
+          }
+        };
+        $http(show_products).then((res) => {
+          data = res.data;
+          $scope.show_product_name = data[0].product_name;
+        });
+
+      }
+
+      $scope.showProduct();
+
+    });
+
+    
+  </script> -->
   <style>
     /* back to top button */
 
@@ -498,86 +442,11 @@
     }
     // /.back to top button
   </script>
-  <!-- <script>
-    var app = angular.module('details', []);
-    app.controller('detailsController', function ($scope, $http) {
-      $scope.hello = "hello mehn";
-      console.log('heyo')
-      // $scope.showProduct = (product) => {
-      //   let show_products = {
-      //     method: 'POST',
-      //     url: 'api/showProduct.php',
-      //     data: {
-      //       id: product.id
-      //     }
-      //   };
-      //   $http(show_products).then((res) => {
-      //     data = res.data;
-      //     // console.log(data[0].fineness);
-      //     $scope.show_fineness = data[0].fineness;
-      //     $scope.show_strength = data[0].compressive_strength;
-      //     $scope.show_color = data[0].color;
-      //     $scope.show_weight = data[0].weight;
-      //     $scope.show_application = data[0].application;
-      //     $scope.show_packaging_type = data[0].packaging_type;
-      //   });
-
-      //   $scope.show_product_name = product.product_name;
-      //   $scope.show_quantity = product.quantity;
-      //   $scope.show_amount = product.amount;
-      //   $scope.show_manufacturer = product.manufacturer;
-      //   $scope.show_created_at = product.created_at;
-      //   $scope.show_product_id = product.id;
-      //   // alert(product.product_name);
-      //   console.log('okay');
-      // }
-    });
-  </script> -->
   <script>
-    // var app = angular.module('myApp', []);
-    // app.controller('myCtrl', function ($scope, $http) {
-      // $scope.getProducts = () => {
-      //   $http.get("api/getProducts.php").then((Response) => {
-      //     $scope.products = Response.data;
-      //     // console.log(Response)
-      //   })
-      // }
-      // $scope.greeting = "heloo";
-
-      // $scope.showProduct = (product) => {
-      //   let show_products = {
-      //     method: 'POST',
-      //     url: 'api/showProduct.php',
-      //     data: {
-      //       id: 1
-      //     }
-      //   };
-      //   $http(show_products).then((res) => {
-      //     data = res.data;
-      //     // console.log(data[0].fineness);
-      //     $scope.show_fineness = data[0].fineness;
-      //     $scope.show_strength = data[0].compressive_strength;
-      //     $scope.show_color = data[0].color;
-      //     $scope.show_weight = data[0].weight;
-      //     $scope.show_application = data[0].application;
-      //     $scope.show_packaging_type = data[0].packaging_type;
-      //   });
-
-      //   $scope.show_product_name = product.product_name;
-      //   $scope.show_quantity = product.quantity;
-      //   $scope.show_amount = product.amount;
-      //   $scope.show_manufacturer = product.manufacturer;
-      //   $scope.show_created_at = product.created_at;
-      //   $scope.show_product_id = product.id;
-      //   // alert(product.product_name);
-      //   console.log('okay');
-      // }
-
-      // $scope.getProducts();
-    // });
+    function goBack() {
+      window.history.back();
+    }
   </script>
-
-
 </body>
 
 </html>

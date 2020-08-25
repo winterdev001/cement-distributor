@@ -51,6 +51,12 @@ app.controller('ProductController', function ($scope, $http) {
     // alert(product.product_name);
     console.log('okay');
   }
+
+  $scope.toShowProduct=(id)=>{
+    // $window.location = 'product_details.html' + id;
+    alert('hello')
+  }
+
   // $scope.saveAdd = function () {
   //   $http({
   //     url: '/api/add.php',
