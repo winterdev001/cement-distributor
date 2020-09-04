@@ -37,10 +37,10 @@
               <a></a> -->
               <div class="profile">
                 <img src="../images/male-icon.png" alt="card-img-top" height="100" width="100">
-                <span class="text-light">John Doe</span>
+                <span class="text-light">{{username}}</span>
                 <div class="edit mx-auto">
                   <span class="text-light"><a href="">Edit</a></span>
-                  <span class="text-light"><a href="">Logout</a></span>
+                  <span class="text-light"><a href="" ng-click="logout()">Logout</a></span>
                 </div>
               </div>
             </header>
@@ -55,7 +55,7 @@
               <li><span>Other</span></li>
               <li><a>Search</a></li>
               <li><a>Settings</a></li> -->
-              <li><a>Logout</a></li>
+              <li><a ng-click="logout()">Logout</a></li>
             </ul>
 
           </nav>
@@ -858,6 +858,17 @@
 
       $scope.getProducts();
       $scope.getCategories();
+
+      $scope.username = localStorage.getItem('username');
+
+      $scope.logout = () => {
+        // $scope.loggedin = false;
+        if (localStorage.getItem('username') != null) {
+          var removeUser = localStorage.removeItem('username');
+          // $window.location.href = "./dashboard/dash.html";
+        }
+        $window.location.href = "../api/logout.php";
+      }
     });
 
     app.directive('onError', function () {

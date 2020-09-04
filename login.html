@@ -1,0 +1,59 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/boot.css" />
+  <link rel="stylesheet" href="css/login.css" />
+  <link rel="stylesheet" href="css/animate.css" />
+</head>
+
+<body>
+  <div id="container" ng-app="myApp" ng-controller="myCtrl">
+    <div id="signUpP2">
+      <div id="signUpP22" class="container-fluid signin ">
+        <div class="row d-flex justify-content-center align-items-center">
+          <div class="col-lg-5 shadow bg-grin container-size">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-grin">
+              <a class="btn btn-lg d-flex flex-row align-items-center animated shake delay-2s slower" href="index.html">
+                <img src="images/back.png" alt="back" height="20" width="25" class="d-footer-icon"><span
+                  class="text-light font-weight-light">home</span>
+              </a>
+              <a class="navbar-brand ml-auto" href="index.html">
+                <span class="font-weight-bold p-2 text-center mx-auto text-center nav-brand-txt nav-text ">KIKU</span>
+              </a>
+            </nav>
+            <div class="container text-center text-light mt-5">
+              <img class="mb-4 rounded-circle animated fadeIn slow mt-3" src="images/brian.png" alt="" width="100"
+                height="100">
+              <h1 class="h3 mb-3 font-weight-light">#signIn</h1>
+              <form>
+                <label for="inputEmail" class="sr-only mt-1">Email address</label>
+                <input id="inputEmail"
+                  class="form-control mb-1 bg-grin border-top-0 border-left-0 border-right-0 border-ligth rounded-0 text-dark"
+                  placeholder="Username or Email_address" required="" autofocus="" type="text" name='user_email'
+                  ng-model="user_email">
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input id="inputPassword"
+                  class="form-control bg-grin border-top-0 border-left-0 border-right-0 border-ligth rounded-0 text-dark"
+                  placeholder="Password" required="" type="password" name='user_password' ng-model="user_password">
+                <button class="btn btn-lg mt-3 btn-dark radius" ng-click="login()">SignIn</button>
+                <!-- <div class="mt-2">
+                  <span class="text-muted">Don't have an account???</span><a href="signup.html" class="card-link">
+                    SignUp</a>
+                </div> -->
+                <p class="mt-2 mb-3 text-muted">© 2020</p>
+              </form>
+            </div>
+          </div>          
+        </div>
+      </div>
+      <script src="js/angular.js"></script>
+      <script src="js/jquery.min.js"></script>
+      <script src="js/bootstrap.min.js"></script>
+      <script src="js/sweetalert2.js"></script>
+      <script src="js/auth.js"></script>
+</body>
+
+</html>

@@ -13,7 +13,7 @@
 
 </head>
 
-<body>
+<body ng-app="admin" ng-controller="myCtrl">
   <div class="content container-fluid">
     <!-- <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus culpa odio fugiat nulla quos dolores neque esse doloremque maxime perferendis labore sint omnis, earum quod illo possimus beatae architecto porro?</p> -->
     <div class="row bg-dark">
@@ -21,17 +21,16 @@
         <div class="aside">
           <!-- <h3>side</h3> -->
           <nav class="side-nav">
-
             <header>
               <!-- <span></span>
               John Doe
               <a></a> -->
               <div class="profile">
                 <img src="../images/male-icon.png" alt="card-img-top" height="100" width="100">
-                <span class="text-light">John Doe</span>
+                <span class="text-light">{{username}}</span>
                 <div class="edit mx-auto">
                   <span class="text-light"><a href="">Edit</a></span>
-                  <span class="text-light"><a href="">Logout</a></span>
+                  <span class="text-light"><a href="" ng-click="logout()">Logout</a></span>
                 </div>
               </div>
             </header>
@@ -46,7 +45,7 @@
               <li><span>Other</span></li>
               <li><a>Search</a></li>
               <li><a>Settings</a></li> -->
-              <li><a>Logout</a></li>
+              <li><a ng-click="logout()">Logout</a></li>
             </ul>
 
           </nav>
@@ -73,29 +72,35 @@
           <div class="card-deck  mt-4 mb-3 widget">
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
               <div class="widget">
-                <a href="products.html" class="text-decoration-none"><div class="card">
-                <div class="card-body">
-                <h5 class="text-center text-grin">Products</h5>
-                </div>
-                </div></a>
+                <a href="products.html" class="text-decoration-none">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="text-center text-grin">Products</h5>
+                    </div>
+                  </div>
+                </a>
               </div>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
               <div class="widget">
-                <a href="#" class="text-decoration-none"><div class="card">
-                <div class="card-body">
-                <h5 class="text-center text-blu">Orders</h5>
-                </div>
-                </div></a>
+                <a href="#" class="text-decoration-none">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="text-center text-blu">Orders</h5>
+                    </div>
+                  </div>
+                </a>
               </div>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
               <div class="widget">
-                <a href="#" class="text-decoration-none"><div class="card">
-                <div class="card-body">
-                <h5 class="text-center text-warning">Inquiries</h5>
-                </div>
-                </div></a>
+                <a href="#" class="text-decoration-none">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="text-center text-warning">Inquiries</h5>
+                    </div>
+                  </div>
+                </a>
               </div>
             </div>
           </div>
@@ -172,8 +177,8 @@
 
   </script>
   <script src="dashboard.js"></script>
-  <script src="../js/angular.min.js"></script>
-  <script src="../js/custom.js"></script>
+  <script src="js/angular.min.js"></script>
+  <!-- <script src="js/custom.js"></script> -->
   <!-- JS, Popper.js, and jQuery -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
@@ -184,6 +189,44 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
     integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
     crossorigin="anonymous"></script>
+  <script>
+    var app = angular.module('admin', []);
+
+    app.controller('myCtrl', function ($scope, $http, $window) {
+
+      // $scope.test = "this is it";
+      $scope.getProducts = () => {
+        $http.get("../api/getProducts.php").then((Response) => {
+          $scope.products = Response.data;
+          // console.log(Response)
+        })
+      }
+
+      $scope.getProducts();
+
+      $scope.get_admin_info = () => {
+        $http.get("../api/admininfo.php").then((Response) => {
+          data = Response.data;
+
+          $scope.admin_name = data[0].username;
+          // $scope.loggedin = 'gucci';
+          console.log(Response.data);
+        })
+      }
+      $scope.get_admin_info();
+
+      $scope.username = localStorage.getItem('username');
+
+      $scope.logout = () => {
+        // $scope.loggedin = false;
+        if (localStorage.getItem('username') != null) {
+          var removeUser = localStorage.removeItem('username');
+          // $window.location.href = "./dashboard/dash.html";
+        }
+        $window.location.href = "../api/logout.php";
+      }
+    });
+  </script>
 </body>
 
 </html>

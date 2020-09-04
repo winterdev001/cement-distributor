@@ -180,7 +180,11 @@ $(document).ready(function () {
     } else if (pathname.includes("contact")) {
         $('.navbar-nav .home').removeClass('active');
         $('.navbar-nav .contacts').addClass('active');
-    } 
+    }else if (pathname.includes("/userdash")) {
+        // $('#accountok').css('display','flex');
+        $('.navbar-nav .home').removeClass('active');
+        $('.navbar-nav .account').addClass('active');        
+    }
     // else {
     //     $('.navbar-nav .home').addClass('active');
     // }
@@ -310,5 +314,6 @@ for (var index = 0; index < tabs.length; index++) {
     tabs[index].addEventListener('click', myFunction, false);
 }
 // / .broad description
+
 
 

@@ -1,0 +1,41 @@
+/* login */
+.bg-grin {
+  background-color: #00c292;
+}
+
+.bg-blu {
+  background-color: #00bcd4;
+}
+
+.text-grin {
+  color: #00c292;
+}
+
+.text-blu {
+  color: #00bcd4;
+}
+
+.btn-grin {
+  background-color: #00c292 !important;
+}
+
+.btn-blu {
+  background-color: #00bcd4 !important;
+}
+
+.btn-grin:hover {
+  background-color: #118d6e !important;
+}
+
+.btn-blu:hover {
+  background-color: #0f6672 !important;
+}
+
+.nav-brand-txt {
+  border:5px solid #f3f3f3;
+  margin: 0 auto;
+}
+
+.signin {
+  margin-top: 1.5rem;
+}

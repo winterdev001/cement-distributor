@@ -67,15 +67,10 @@ app.controller('ProductController', function ($scope, $http) {
 
 // admin dashboard
 
-var app = angular.module('dash', ['ngRoute']);
+var app = angular.module('admin', []);
 
-app.controller('dashController', function ($scope, $http) {
-  // $scope.getProducts = function () {
-  //   $http.get("api/getProducts.php").then((response) => {
-  //     $scope.products = response.data;
-  //     console.log('hello')
-  //   })
-  // }
+app.controller('myCtrl', function ($scope, $http,$window) {
+ 
   $scope.getProducts = () => {
     $http.get("api/getProducts.php").then((Response) => {
       $scope.products = Response.data;
@@ -84,4 +79,15 @@ app.controller('dashController', function ($scope, $http) {
   }
 
   $scope.getProducts();
+
+  $scope.get_admin_info = () => {
+    $http.get("api/admininfo.php").then((Response) => {
+      data = Response.data;
+      
+      $scope.admin_name = data[0].username;
+      // $scope.loggedin = 'gucci';
+      // console.log(Response.data);
+    })
+  }
+  $scope.get_admin_info();
 });

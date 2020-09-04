@@ -1,0 +1,84 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/boot.css" />
+  <link rel="stylesheet" href="css/login.css" />
+  <link rel="stylesheet" href="css/animate.css" />
+</head>
+
+<body>
+  <div id="container" ng-app="myApp" ng-controller="myCtrl">
+    <div id="signUpP2">
+      <div id="signUpP22" class="container-fluid signin mt-3 mb-3">
+        <div class="row d-flex justify-content-center align-items-center">
+          <div class="col-lg-5 shadow bg-grin container-size">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-grin">
+              <a class="btn btn-lg d-flex flex-row align-items-center animated shake delay-2s slower" href="index.html">
+                <img src="images/back.png" alt="back" height="20" width="25" class="d-footer-icon"><span
+                  class="text-light font-weight-light">home</span>
+              </a>
+              <a class="navbar-brand ml-auto" href="index.html">
+                <span class="font-weight-bold p-2 text-center mx-auto text-center nav-brand-txt nav-text ">KIKU</span>
+              </a>
+            </nav>
+            <div class="container text-center text-light mt-5">
+              <img class="mb-4 rounded-circle animated fadeIn slow mt-3" src="images/brian.png" alt="" width="100"
+                height="100">
+              <h1 class="h3 mb-3 font-weight-light">#signUp</h1>
+              <form>
+                <label for="inputPassword" class="sr-only">FirstName</label>
+                <input id="basic-addon1"
+                  class="form-control text-capitalize mt-1 bg-grin border-top-0 border-left-0 border-right-0 border-ligth rounded-0 text-dark"
+                  placeholder="FirstName" required="" type="text" ng-model="user_Fname">
+                <label for="inputPassword" class="sr-only">SecondName</label>
+                <input id="basic-addon2"
+                  class="form-control text-capitalize mt-1 bg-grin border-top-0 border-left-0 border-right-0 border-light rounded-0 text-dark"
+                  placeholder="SecondName" required="" type="text" ng-model="user_Sname">
+                <label for="inputPassword" class="sr-only">UserName</label>
+                <input id="basic-addon2"
+                  class="form-control text-capitalize mt-1 bg-grin border-top-0 border-left-0 border-right-0 border-light rounded-0 text-dark"
+                  placeholder="Username" required="" type="text" ng-model="user_name">
+                <label for="inputPassword" class="sr-only">Contact</label>
+                <input id="basic-addon3"
+                  class="form-control text-capitalize mt-1 bg-grin border-top-0 border-left-0 border-right-0 border-light rounded-0 text-dark"
+                  placeholder="Contact..+2507.." required="" type="text" ng-model="user_phone">
+                <label for="inputEmail" class="sr-only">Email address</label>
+                <input id="inputEmail"
+                  class="form-control text-capitalize mt-1 bg-grin border-top-0 border-left-0 border-right-0 border-light rounded-0 text-dark"
+                  placeholder="Email address" required="" type="email" ng-model="user_email">
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input id="inputPassword"
+                  class="form-control text-capitalize mt-1 bg-grin border-top-0 border-left-0 border-right-0 border-light rounded-0 text-dark"
+                  placeholder="Password" required="" type="password" ng-model="user_password">
+                <label for="inputPassword" class="sr-only">CPassword</label>
+                <input id="inputPassword"
+                  class="form-control text-capitalize mt-1 bg-grin border-top-0 border-left-0 border-right-0 border-light rounded-0 text-dark"
+                  placeholder="Confirm_Password" required="" type="password" ng-model="confirm_user_password">
+                <!-- <div class="text-center mt-2">
+                  <p>
+                    By signing up,you agree to our <span class="text-primary" data-toggle='modal'
+                      data-target='#terms'>Terms and Conditions</span>.
+                  </p>
+                </div> -->
+                <button class="btn btn-lg btn-dark radius text-white mt-2" ng-click="createAccount()">SignUp</button>
+                <div class="mt-2">
+                  <span class="text-muted">Have an account???</span><a href="login.html" class="card-link"> SignIn</a>
+                </div>
+                <p class="mt-2 mb-3 text-muted">© 2020</p>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <script src="js/angular.js"></script>
+      <script src="js/jquery.min.js"></script>
+      <script src="js/bootstrap.min.js"></script>
+      <script src="js/sweetalert2.js"></script>
+      <script src="js/auth.js"></script>
+</body>
+
+</html>

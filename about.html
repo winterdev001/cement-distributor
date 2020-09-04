@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="css/about.css">
 </head>
 
-<body>
+<body ng-app = "myApp" ng-controller= "myCtlr">
   <header>
     <div include-html="inc/navigation.html"></div>
   </header>
@@ -117,6 +117,7 @@
   <!-- / .footer -->
   <!-- scripts -->
   <script src="js/app.js"></script>
+  <script src="js/angular.min.js"></script>
   <style>
     /* back to top button */
 
@@ -163,6 +164,29 @@
       $('html,body').animate({ scrollTop: 0 }, 1000);
     }
     // /.back to top button
+  </script>
+  <script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtlr', function ($scope, $http, $window) {
+      if (localStorage.getItem('username') != null) {
+        $scope.username = localStorage.getItem('username');
+        $scope.loggedin = true;
+        $scope.notuser = false;
+      } else {
+        $scope.loggedin = false;
+        $scope.notuser = true;
+      }
+
+      $scope.logout = () => {
+        $scope.loggedin = false;
+        $scope.notuser = true;
+        if (localStorage.getItem('username') != null) {
+          var removeUser = localStorage.removeItem('username');
+          // $window.location.href = "./dashboard/dash.html";
+        }
+        $window.location.href = "api/logout.php";
+      }
+    });
   </script>
 
 </body>

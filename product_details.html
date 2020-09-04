@@ -29,23 +29,23 @@
 </head>
 
 <body>
-  <header>
-    <div include-html="inc/navigation.html"></div>
-  </header>
-  <!-- breadcrumbs -->
-  <div class="container mt-5 mb-5">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb ">
-        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-        <li class="breadcrumb-item"><a href="shop.html">Products</a></li>
-        <li class="breadcrumb-item active" aria-current="page" id="pname"></li>
-      </ol>
-    </nav>
-  </div>
   <!-- / .breadcrumbs -->
-  <div>
-    <!-- details section -->
+  <div>    
     <div class="container" ng-app="pdetails" ng-controller="pdetailsCtrl">
+      <header>
+        <div include-html="inc/navigation.html"></div>
+      </header>
+      <!-- breadcrumbs -->
+      <div class="container mt-5 mb-5">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb ">
+            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="shop.html">Products</a></li>
+            <li class="breadcrumb-item active" aria-current="page" id="pname"></li>
+          </ol>
+        </nav>
+      </div>
+      <!-- details section -->
       <div class=" card product-detail mb-5">
         <div class="row  card-body">
           <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 product-detail-img-sect">
@@ -353,6 +353,25 @@
       }
 
       $scope.showProduct();
+
+      if (localStorage.getItem('username') != null) {
+        $scope.username = localStorage.getItem('username');
+        $scope.loggedin = true;
+        $scope.notuser = false;
+      } else {
+        $scope.loggedin = false;
+        $scope.notuser = true;
+      }
+
+      $scope.logout = () => {
+        $scope.loggedin = false;
+        $scope.notuser = true;
+        if (localStorage.getItem('username') != null) {
+          var removeUser = localStorage.removeItem('username');
+          // $window.location.href = "./dashboard/dash.html";
+        }
+        $window.location.href = "api/logout.php";
+      }
 
     });
 
