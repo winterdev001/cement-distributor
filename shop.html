@@ -41,6 +41,12 @@
       </ol>
     </nav>
   </div>
+  <div class="container" ng-show="addtocartsuccess">
+    <div class="alert alert-success" id="success-alert">
+      <button type="button" class="close" data-dismiss="alert">x</button>
+      <strong>Success! </strong> Product have added to your cart.
+    </div>
+  </div>
   <!-- / .breadcrumbs -->
   <!-- content -->
   <div class="container bg-light filter-section">
@@ -97,20 +103,22 @@
       <div class="card-body">
         <div class="row row-cols-1 row-cols-md-4">
           <div class="col mb-4" ng-repeat="product in products | orderBy:'-created_at'">
-            <a href="" class="text-decoration-none " >
+            <a href="" class="text-decoration-none ">
               <div class="card latest-product-card">
                 <div>
                   <!-- <img ng-src="images/products/{{product.image}}" class="card-img-top" alt="..."> -->
-                  <img ng-src=" images/products/{{product.image}} " height="200" width="100" on-error="images/err.png" class="card-img-top"
-                    alt="...">
+                  <img ng-src=" images/products/{{product.image}} " height="200" width="100" on-error="images/err.png"
+                    class="card-img-top" alt="...">
                 </div>
 
                 <div class="card-body">
                   <h5 class="card-title text-center text-dark">{{product.product_name}}</h5>
                   <p class="card-text last-color-cl text-center">{{product.amount}} Rwf</p>
                   <p>
-                    <span><button class="btn btn-blu font-weight-bold" ng-click="toShowProduct(product.id)"><i class="ti-eye"></i></button></span>
-                    <span class="float-right"><button class="btn btn-grin" ng-click="addToCart(product)"><i class="ti-shopping-cart"></i></button></span>
+                    <span><button class="btn btn-blu font-weight-bold" ng-click="toShowProduct(product.id)"><i
+                          class="ti-eye"></i></button></span>
+                    <span class="float-right"><button class="btn btn-grin" id="add_to_cart"
+                        ng-click="addToCart(product)"><i class="ti-shopping-cart"></i></button></span>
                   </p>
                 </div>
               </div>
@@ -139,6 +147,47 @@
   </div>
   <!-- / .content -->
 
+  <!-- modals -->
+    <!-- cart modal -->
+    <div class="modal fade" id="cart_status" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg cart-status">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Your cart <i class="ti-shopping-cart"></i> | <span class="badge badge-secondary">{{cart_items}}</span></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <table class="table table-stripped">
+              <thead>
+                <th></th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th>action</th>
+              </thead>
+              <tbody>
+                <tr ng-repeat="ctp in ctproducts">
+                  <td>{{ctp.pname}}</td>
+                  <td>{{ctp.price}}</td>
+                  <td>{{ctp.qty}}</td>
+                  <td>{{ctp.price * ctp.qty}}</td>
+                  <td><button class="btn btn-danger" ng-click="rmvProdFrmCart(ctp.pid)">Remove</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end cart modal -->
+  <!-- modals -->
+
   <div class="to-top">
     <a href="#" onclick="topFunction()" id="myBtn" title="Go to top">
       <span class="d-flex align-content-center"><i class="fa fa-chevron-up"></i></span>
@@ -150,6 +199,8 @@
   <!-- scripts -->
   <script src="js/app.js"></script>
   <script src="js/angular.min.js"></script>
+  <script src="js/sweetalert1.js"></script>
+  <!-- <script src="js/jquery.min.js"></script> -->
   <script>
     var app = angular.module('shop', []);
 
@@ -198,12 +249,73 @@
         $window.location.href = "api/logout.php";
       }
 
-      $scope.cart_items = 0;
-      $scope.addToCart = () => {        
+      // add product to cart
+      $scope.cart = [];
+      $scope.cart_items = 0;      
+      $scope.addToCart = (product) => {
         //  counts += count ;
-        var count = 1;
-        $scope.cart_items += count;
+        // var count = 1;
+        // $scope.cart_items += count;
+        var prod_id = product.id;
+        if ($scope.cart.length == 0) {
+          $scope.cart.push({
+            pid: product.id,
+            pname: product.product_name,
+            qty: 1,
+            price: product.amount
+          });
+        } else {
+          const index = $scope.cart.findIndex(ct => ct.pid === prod_id);
+          if (index != -1) {
+            $scope.cart[index].qty += 1;
+          } else {
+            $scope.cart.push({
+              pid: product.id,
+              pname: product.product_name,
+              qty: 1,
+              price: product.amount
+            });
+          }
+        }
+        // console.log($scope.cart);
+        localStorage.setItem('cart', JSON.stringify($scope.cart));
+        var newct = localStorage.getItem('cart');
+        // console.log(JSON.parse(newct));
+        $scope.cart_items = JSON.parse(newct).length;
+        
+        swal({
+          title: 'Product added to cart!.',
+          // text: 'Redirecting...',
+          icon: "success",
+          timer: 1500,
+          buttons: true,
+        });
       }
+
+      // get cart products
+      $scope.getCartProducts = () => {
+        // alert('hello');
+        var ct = localStorage.getItem('cart');
+        console.log(ct)
+        if(localStorage.getItem('cart') != null ){          
+          $scope.ctproducts = JSON.parse(ct);
+          $("#cart_status").modal('show');
+        }else {
+          swal({
+            title: "No product choosen yet.",
+            icon:error,
+          });
+        }
+      }
+
+      // $scope.rmvProdFrmCart = (pid) => {
+      //   var oldcart = JSON.parse(localStorage.getItem('cart'));
+      //   var index = oldcart.indexOf(pid);
+      //   var changedcart = oldcart.splice(index, 1);
+      //   localStorage.removeItem('cart');
+      //   localStorage.setItem('cart',JSON.stringify(changedcart));
+
+      // }
     })
 
     app.directive('onError', function () {
@@ -216,7 +328,9 @@
         }
       }
     })
+
   </script>
+ 
   <style>
     /* back to top button */
 
