@@ -148,44 +148,51 @@
   <!-- / .content -->
 
   <!-- modals -->
-    <!-- cart modal -->
-    <div class="modal fade" id="cart_status" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg cart-status">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Your cart <i class="ti-shopping-cart"></i> | <span class="badge badge-secondary">{{cart_items}}</span></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <table class="table table-stripped">
-              <thead>
-                <th></th>
-                <th>Price</th>
-                <th>Qty</th>
-                <th>Total</th>
-                <th>action</th>
-              </thead>
-              <tbody>
-                <tr ng-repeat="ctp in ctproducts">
-                  <td>{{ctp.pname}}</td>
-                  <td>{{ctp.price}}</td>
-                  <td>{{ctp.qty}}</td>
-                  <td>{{ctp.price * ctp.qty}}</td>
-                  <td><button class="btn btn-danger" ng-click="rmvProdFrmCart(ctp.pid)">Remove</button></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-          </div>
+  <!-- cart modal -->
+  <div class="modal fade" id="cart_status" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+    data-refresh="true">
+    <div class="modal-dialog modal-lg cart-status">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Your cart <i class="ti-shopping-cart"></i> | <span
+              class="badge badge-secondary">{{cart_items}}</span></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <table class="table table-stripped">
+            <thead>
+              <th></th>
+              <th>Price</th>
+              <th>Qty</th>
+              <th>Total</th>
+              <th>action</th>
+            </thead>
+            <tbody>
+              <tr ng-repeat="ctp in ctproducts" >
+                <td>{{ctp.product_name}}</td>
+                <td>{{ctp.amount}}</td>
+                <td>{{ctp.quantity}}</td>
+                <td>{{ctp.amount * ctp.quantity}}</td>
+                <td><button class="btn btn-danger" ng-click="rmvProdFrmCart(ctp.id)">Remove</button></td>
+              </tr>
+              <tr>
+                <td colspan="3" class="mx-auto">Grand Total</td>
+                <td>{{cart_total}}</td>
+                <td><button class="btn btn-danger">Empty Cart</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Continue Shopping</button>
+          <button type="button" class="btn btn-primary">Checkout</button>
         </div>
       </div>
     </div>
-    <!-- end cart modal -->
+  </div>
+  <!-- end cart modal -->
   <!-- modals -->
 
   <div class="to-top">
@@ -249,73 +256,130 @@
         $window.location.href = "api/logout.php";
       }
 
-      // add product to cart
-      $scope.cart = [];
-      $scope.cart_items = 0;      
+      // add product to cart     
+      $scope.initialCart = () => {
+        $http.get('api/getcartstatus.php').then((res) => {
+          $scope.cart_items = res.data.length;
+        });
+      }
+      $scope.initialCart();
+
       $scope.addToCart = (product) => {
-        //  counts += count ;
-        // var count = 1;
-        // $scope.cart_items += count;
-        var prod_id = product.id;
-        if ($scope.cart.length == 0) {
-          $scope.cart.push({
+
+        let cart_stuff = {
+          method: 'POST',
+          url: 'api/addtocart.php',
+          data: {
             pid: product.id,
             pname: product.product_name,
             qty: 1,
             price: product.amount
-          });
-        } else {
-          const index = $scope.cart.findIndex(ct => ct.pid === prod_id);
-          if (index != -1) {
-            $scope.cart[index].qty += 1;
-          } else {
-            $scope.cart.push({
-              pid: product.id,
-              pname: product.product_name,
-              qty: 1,
-              price: product.amount
-            });
           }
         }
-        // console.log($scope.cart);
-        localStorage.setItem('cart', JSON.stringify($scope.cart));
-        var newct = localStorage.getItem('cart');
-        // console.log(JSON.parse(newct));
-        $scope.cart_items = JSON.parse(newct).length;
-        
-        swal({
-          title: 'Product added to cart!.',
-          // text: 'Redirecting...',
-          icon: "success",
-          timer: 1500,
-          buttons: true,
+        $http(cart_stuff).then((response) => {
+          datas = response.data;
+          if (datas == 'done') {
+            $http.get('api/getcartstatus.php').then((res) => {
+              $scope.cart_items = res.data.length;
+            });
+            swal({
+              title: 'Product added to cart!.',
+              // text: 'Redirecting...',
+              icon: "success",
+              timer: 1500,
+              buttons: true,
+            });
+          } else {
+            swal({
+              text: response.data,
+              timer: 1500
+            });
+          }
         });
       }
 
       // get cart products
       $scope.getCartProducts = () => {
-        // alert('hello');
-        var ct = localStorage.getItem('cart');
-        console.log(ct)
-        if(localStorage.getItem('cart') != null ){          
-          $scope.ctproducts = JSON.parse(ct);
-          $("#cart_status").modal('show');
-        }else {
-          swal({
-            title: "No product choosen yet.",
-            icon:error,
-          });
-        }
+        $http.get('api/getcartstatus.php').then((res) => {
+          if (res.data === "No data") {
+            swal({
+              title: "No product choosen yet.",
+            });
+          } else {
+            $scope.ctproducts = res.data;
+            $("#cart_status").modal('show');
+            $scope.getCartTotal();
+          }
+        });
+      }
+      
+
+      // total amount of cart
+      // $scope.TotalAmt = 0;
+      // $scope.CalculateSum = function (product) {
+      //   $scope.TotalAmt += (product.amount * product.quantity);
+      // }
+      // //It is enough to Write code $scope.TotalAmt =0; in the function where the cart.products get allocated value. 
+      // $scope.ResetTotalAmt = function (product) {
+      //   $scope.TotalAmt = 0;
+      // }
+      // $scope.invoiceTotal = 0;
+      // $scope.setTotals = function (item) {
+      //   if (item) {
+      //     var total = item.amount * item.quantity;
+      //     $scope.invoiceCount += item.quantity;
+      //     $scope.invoiceTotal += total;
+      //   }
+      // }
+
+      $scope.getCartTotal = () => {
+        $http.get('api/carttotal.php').then((response) =>{
+          $scope.cart_total = response.data[0].total;
+        });
       }
 
-      // $scope.rmvProdFrmCart = (pid) => {
-      //   var oldcart = JSON.parse(localStorage.getItem('cart'));
-      //   var index = oldcart.indexOf(pid);
-      //   var changedcart = oldcart.splice(index, 1);
-      //   localStorage.removeItem('cart');
-      //   localStorage.setItem('cart',JSON.stringify(changedcart));
+      $scope.getCartTotal();
 
-      // }
+
+      $scope.rmvProdFrmCart = (id) => {
+        // var oldcart = JSON.parse(localStorage.getItem('cart'));
+        // var index = oldcart.indexOf(pid);
+        // var changedcart = oldcart.splice(index, 1);
+        // localStorage.removeItem('cart');
+        // localStorage.setItem('cart',JSON.stringify(changedcart));
+        let selected_products = {
+          method: 'POST',
+          url: 'api/removecartproduct.php',
+          data: {
+            'id': id
+          }
+        }
+        if (id != null) {
+          swal({
+            title: "Are you sure?",
+            // text: "Once deleted, you will not be able to recover this imaginary file!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+          }).then((result) => {
+            if (result) {
+              $http(selected_products).then((res) => {
+                if (res.data == 'done') {
+                  swal("Deleted!", {
+                    icon: "success",
+                  }).then((result) => {
+                    $scope.getCartProducts();
+                    $scope.initialCart();
+                    // $scope.CalculateSum();
+                  });
+                } else {
+                  swal({ text: res.data });
+                }
+              })
+            }
+          })
+        }
+      }
     })
 
     app.directive('onError', function () {
@@ -330,7 +394,7 @@
     })
 
   </script>
- 
+
   <style>
     /* back to top button */
 
