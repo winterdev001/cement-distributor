@@ -30,8 +30,8 @@
 
 <body>
   <!-- / .breadcrumbs -->
-  <div>    
-    <div class="container" ng-app="pdetails" ng-controller="pdetailsCtrl">
+  <div class="container" ng-app="pdetails" ng-controller="pdetailsCtrl">
+    <div>
       <header>
         <div include-html="inc/navigation.html"></div>
       </header>
@@ -102,14 +102,16 @@
                       <div class="num-block skin-6 ">
                         <div class="num-in rounded-pill">
                           <span class="minus dis ">-</span>
-                          <input type="text" class="in-num" value="10" readonly="">
+                          <input type="text" class="in-num" readonly="" ng-model="kwantity">
                           <span class="plus">+</span>
                         </div>
                       </div>
                     </div>
                     <div class=" col-lg-4 col-md-4 col-sm-12 col-xs-12">
                       <div class="add-order-sec">
-                        <button class="btn   rounded-pill  add-order-btn">Add to Order</button>
+                        <button class="btn   rounded-pill  add-order-btn"
+                          ng-click="addToCart(show_product_id,show_product_name,kwantity,show_amount)">Add to
+                          Cart</button>
                       </div>
                     </div>
                   </div>
@@ -221,8 +223,89 @@
       </div>
     </div>
     <!--/ .broad description  -->
+
+    <!-- / .details section -->
+
+    <!-- Related Products -->
+    <section>
+      <div class="container">
+        <h3 class="text-center mb-5">Related Products</h3>
+        <div class="row">
+          <div class="MultiCarousel" data-items="1,2,3,4" data-slide="1" id="MultiCarousel" data-interval="1000">
+            <div class="MultiCarousel-inner" ng-repeat="product in products | orderBy:'created_at' | limitTo:4">
+              <a href="" class="text-decoration-none">
+                <div class="item card">
+                  <img ng-src=" images/products/{{product.image}} " on-error="images/err.png" class="card-img-top"
+                    alt="" height="250" width="500">
+                  <div class=" card-body">
+                    <h5 class="card-title text-center text-dark">{{product.product_name}}</h5>
+                    <p class="card-text last-color-cl text-center">Rwf {{product.amount}}</p>
+                    <p>
+                      <span><button class="btn btn-blu font-weight-bold" ng-click="toShowProduct(product.id)"><i
+                            class="ti-eye"></i></button></span>
+                      <span class="float-right"><button class="btn btn-grin" id="add_to_cart"
+                          ng-click="addToCart(product.id,product.product_name,10,product.amount)"><i
+                            class="ti-shopping-cart"></i></button></span>
+                    </p>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- / .Related Products -->
+    <!-- modals -->
+    <!-- cart modal -->
+    <div class="modal fade" id="cart_status" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+      data-refresh="true">
+      <div class="modal-dialog modal-lg cart-status">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Your cart <i class="ti-shopping-cart"></i> | <span
+                class="badge badge-secondary">{{cart_items}}</span></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <table class="table table-stripped">
+              <thead>
+                <th></th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th>action</th>
+              </thead>
+              <tbody>
+                <tr ng-repeat="ctp in ctproducts">
+                  <td>{{ctp.product_name}}</td>
+                  <td>{{ctp.amount}}</td>
+                  <td><input type="text" class="fomr-control" ng-change="updateCartQty(ctp.id,ctp.quantity)"
+                    ng-model="ctp.quantity"></td>
+                  <td>{{ctp.amount * ctp.quantity}}</td>
+                  <td><button class="btn btn-warning" ng-click="rmvProdFrmCart(ctp.id)">Remove</button></td>
+                </tr>
+                <tr>
+                  <td colspan="3" class="mx-auto">Grand Total</td>
+                  <td>{{cart_total}}</td>
+                  <td><button class="btn btn-danger" ng-click="clearCart()">Empty Cart</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Continue Shopping</button>
+            <button type="button" class="btn btn-primary">Checkout</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end cart modal -->
+
     <!-- product reviews Modal -->
-    <div class="modal fade" id="add_review" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <!-- <div class="modal fade" id="add_review" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
       aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -255,52 +338,11 @@
           </form>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- / .product reviews Modal -->
-
-
-    <!-- / .details section -->
-
-    <!-- Related Products -->
-    <section>
-      <div class="container">
-        <h3 class="text-center mb-5">Related Products</h3>
-        <div class="row">
-          <div class="MultiCarousel" data-items="1,2,3,4" data-slide="1" id="MultiCarousel" data-interval="1000">
-            <div class="MultiCarousel-inner">
-              <div class="item card">
-                <img src="images/products/Phx-Green Bag Full-1200x1200.jpg" class="card-img-top" alt="">
-                <div class=" card-body">
-                  <h5 class="card-title text-center text-dark">Ambuja Cement</h5>
-                  <p class="card-text last-color-cl text-center">18,000 Rwf</p>
-                  <!-- <p>₹ 6000</p>
-                  <p>50% off</p> -->
-                </div>
-              </div>
-              <div class="item card">
-                <img src="images/products/surebuild-bag-mock-up.png" class="card-img-top" alt="">
-                <div class="pad15 card-body">
-                  <h5 class="card-title text-center text-dark">Surebuild</h5>
-                  <p class="card-text last-color-cl text-center">15,000 Rwf</p>
-                  <!-- <p>₹ 6000</p> -->
-                  <!-- <p>50% off</p> -->
-                </div>
-              </div>
-
-            </div>
-            <button class="btn third-color leftLst">
-              < </button>
-                <button class="btn third-color rightLst">></button>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- / .Related Products -->
-    <!-- <section ng-app="pdetails" ng-controller="pdetailsCtrl">
-      <h3>hello</h3>
-      <div>{{sayhi}}</div>
-    </section> -->
+    <!-- modals -->
   </div>
+
 
 
   <div class="to-top">
@@ -315,12 +357,15 @@
 
   <script src="js/app.js"></script>
   <script src="js/angular.min.js"></script>
+  <script src="js/sweetalert1.js"></script>
   <!-- <script src="js/custom.js"></script> -->
   <script>
     // console.log('hello');
     var app = angular.module('pdetails', []);
 
-    app.controller('pdetailsCtrl', function ($scope, $http) {
+    app.controller('pdetailsCtrl', function ($scope, $http, $window) {
+
+      $scope.kwantity = 10;
       var storedId = localStorage.getItem('id');
       $scope.showProduct = () => {
 
@@ -333,7 +378,7 @@
         };
         $http(show_products).then((res) => {
           data = res.data;
-          console.log(res.data);
+          // console.log(res.data);
           $scope.show_fineness = data[0].fineness;
           $scope.show_strength = data[0].compressive_strength;
           $scope.show_color = data[0].color;
@@ -354,6 +399,30 @@
 
       $scope.showProduct();
 
+      $scope.getfeed = () => {
+        $http.get("api/getData.php").then((Response) => {
+          $scope.products = Response.data;
+          // console.log(Response)
+        })
+      }
+
+      $scope.getfeed();
+
+      $scope.toShowProduct = (id) => {
+        // $window.location.href = 'product_details.html';
+        // alert('hello')
+        if (localStorage.getItem('id') == null) {
+          var addId = localStorage.setItem('id', id);
+          $window.location.href = 'product_details.html';
+        } else {
+          localStorage.removeItem('id');
+          var addId = localStorage.setItem('id', id)
+          $window.location.href = 'product_details.html';
+          var getId = localStorage.getItem('id');
+          console.log(getId);
+        }
+      }
+
       if (localStorage.getItem('username') != null) {
         $scope.username = localStorage.getItem('username');
         $scope.loggedin = true;
@@ -371,6 +440,172 @@
           // $window.location.href = "./dashboard/dash.html";
         }
         $window.location.href = "api/logout.php";
+      }
+
+      // cart functions
+
+      // add product to cart     
+      $scope.initialCart = () => {
+        $http.get('api/getcartstatus.php').then((res) => {
+          if (res.data == 'No data') {
+            $scope.cart_items = 0;
+            // console.log($scope.cart_items)
+          } else {
+            $scope.cart_items = res.data.length;
+            // console.log(res.data)
+          }
+        });
+      }
+      $scope.initialCart();
+
+      $scope.addToCart = (id, name, qty, amount) => {
+        let cart_stuff = {
+          method: 'POST',
+          url: 'api/addtocart.php',
+          data: {
+            pid: id,
+            pname: name,
+            qty: qty,
+            price: amount
+          }
+        }
+        $http(cart_stuff).then((response) => {
+          datas = response.data;
+          if (datas == 'done') {
+            $http.get('api/getcartstatus.php').then((res) => {
+              $scope.cart_items = res.data.length;
+            });
+            swal({
+              title: 'Product added to cart!.',
+              // text: 'Redirecting...',
+              icon: "success",
+              timer: 1500,
+              buttons: true,
+            });
+          } else {
+            swal({
+              text: response.data,
+              timer: 1500
+            });
+          }
+        });
+      }
+
+      // get cart products
+      $scope.getCartProducts = () => {
+        $http.get('api/getcartstatus.php').then((res) => {
+          if (res.data == 'No data') {
+            swal({
+              title: "No product choosen yet.",
+            });
+          } else {
+            $scope.ctproducts = res.data;
+            $("#cart_status").modal('show');
+            $scope.getCartTotal();
+          }
+        });
+      }
+
+
+      $scope.getCartTotal = () => {
+        $http.get('api/carttotal.php').then((response) => {
+          $scope.cart_total = response.data[0].total;
+        });
+      }
+
+      $scope.getCartTotal();
+
+
+      $scope.rmvProdFrmCart = (id) => {
+        let selected_products = {
+          method: 'POST',
+          url: 'api/removecartproduct.php',
+          data: {
+            'id': id
+          }
+        }
+        if (id != null) {
+          swal({
+            title: "Are you sure?",
+            // text: "Once deleted, you will not be able to recover this imaginary file!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+          }).then((result) => {
+            if (result) {
+              $http(selected_products).then((res) => {
+                if (res.data == 'done') {
+                  swal("Deleted!", {
+                    icon: "success",
+                  }).then((result) => {
+                    $scope.getCartProducts();
+                    $scope.initialCart();
+                    // $scope.CalculateSum();
+                  });
+                } else if (res.data == 'no data left') {
+                  swal("Deleted!", {
+                    icon: "success",
+                  }).then((result) => {
+                    $("#cart_status").modal('hide');
+                    $window.location.reload();
+                  });
+                } else {
+                  swal({ text: res.data });
+                }
+              })
+            }
+          })
+        }
+      }
+
+      $scope.clearCart = () => {
+        swal({
+          title: "Are you sure?",
+          text: "All selected products will be romoved.",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        }).then((result) => {
+          if (result) {
+            $http.get('api/clearcart.php').then((res) => {
+              if (res.data == 'done') {
+                swal("Removed!", {
+                  icon: "success",
+                }).then((result) => {
+                  $("#cart_status").modal('hide');
+                  $window.location.reload();
+                });
+              } else {
+                swal({ text: res.data });
+              }
+            })
+          }
+        })
+      }
+
+      $scope.updateCartQty = (id, qty) => {
+        console.log(id, qty);
+        if (qty < 10) {
+          swal({ text: "Quantity can not go beyond 10, if not changed quantiy will be set to 10 by default", icon: "warning" });
+        } else {
+          let cart_updates = {
+            method: 'POST',
+            url: 'api/updatecart.php',
+            data: {
+              id: id,
+              qty: qty
+            }
+          }
+
+          $http(cart_updates).then((response) => {
+            if (response.data == 'done') {
+              $scope.getCartProducts();
+              $scope.initialCart();
+            } else {
+              swal("failed");
+            }
+          });
+        }
       }
 
     });
