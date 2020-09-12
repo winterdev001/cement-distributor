@@ -1,0 +1,43 @@
+{
+  "Suv": {
+    "Gas": {
+      "Automatic": {
+        "Black": [
+          "BMW",
+          "Honda",
+          "Hyundai"
+        ],
+        "Green": [
+          "Brabus"
+        ]
+      }
+    }
+  },
+  "Sports": {
+    "Oil": {
+      "Manual": {
+        "White": [
+          "Rambo",
+          "Mclaren",
+          "Ferrari"
+        ],
+        "Blue": [
+          "Maserati"
+        ]
+      }
+    }
+  },
+  "Truck": {
+    "Electricity": {
+      "Electric": {
+        "Red": [
+          "Tesla",
+          "Mercedes"
+        ],
+        "Orange": [
+          "Audi"
+        ]
+      }
+    }
+  }
+}

@@ -115,7 +115,7 @@
   <div class="container bg-light filter-section">
     <div class="row">
       <div class="col-md-3 col-sm-12 col-xm-12">
-        <span>All Product</span>
+        <span>All Products</span>
       </div>
       <div class="col-md-9 col-sm-12 col-xm-12">
         <select name="" id="">
@@ -251,7 +251,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Continue Shopping</button>
-          <button type="button" class="btn btn-primary">Checkout</button>
+          <button type="button" class="btn btn-primary" ng-click="checkout()">Checkout</button>
         </div>
       </div>
     </div>
@@ -460,7 +460,7 @@
       }
 
       $scope.updateCartQty = (id, qty) => {
-        console.log(id,qty);
+        console.log(id, qty);
         if (qty < 10) {
           swal({ text: "Quantity can not go beyond 10, if not changed quantiy will be set to 10 by default", icon: "warning" });
         } else {
@@ -477,12 +477,29 @@
             if (response.data == 'done') {
               $scope.getCartProducts();
               $scope.initialCart();
-            }else{
+            } else {
               swal("failed");
             }
           });
         }
       }
+
+      // checkout
+      $scope.checkout = () => {
+        if (localStorage.getItem('username') == null) {
+          swal({
+            title: 'Sign in first to continue with checkout.',
+            icon: 'warning',
+            buttons: true
+          }).then((result) => {
+            if (result) {
+              $window.location.href = "login.html";
+            }
+          });         
+        }else {
+          $window.location.href = "checkout.html";
+        }
+      }      
     })
 
     app.directive('onError', function () {

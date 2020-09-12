@@ -1,69 +1,94 @@
 <!DOCTYPE html>
 <html>
-<script src="js/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
 <body>
+  <div ng-app="myApp" ng-controller="myCtrl">
+    <hr>
+    <div>
+      <p>
+      <h3>Province</h3>
+      <ul>
+        <li ng-repeat="address in addresses | unique : 'PROVINCE'">{{address.PROVINCE}}</li>
+      </ul>
+      </p>
+    </div>
+    <div>
+      <p>
+      <h3>Districts</h3>
+      <ul>
+        <li ng-repeat="address in addresses | unique : 'DISTRICT'">{{address.DISTRICT}}</li>
+      </ul>
+      </p>
+    </div>
+    <div>
+      <p>
+      <h3>Sector</h3>
+      <ul>
+        <li ng-repeat="address in addresses | unique : 'SECTOR'">{{address.SECTOR}}</li>
+      </ul>
+      </p>
+    </div>
+    <div>
+      <p>
+      <h3>Cell</h3>
+      <ul>
+        <li ng-repeat="address in addresses | unique : 'CELL'">{{address.CELL}}</li>
+      </ul>
+      </p>
+    </div>
+    <div>
+      <p>
+      <h3>Village</h3>
+      <ul>
+        <li ng-repeat="address in addresses | unique : 'NAME'">{{address.NAME}}</li>
+      </ul>
+      </p>
+    </div>
+    <!-- <div>
+      <p>
+      <h3>Automobiles Fuel</h3>
+      <ul>
+        <li ng-repeat="fuel in fuels">{{fuel}}</li>
+      </ul>
+      </p>
+    </div> -->
 
-<p>Try to change the names.</p>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="check/sample.js"></script>
 
-<div ng-app="myApp" ng-controller="myCtrl">
+  <!-- <script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function ($scope, $http) {
+      $scope.check = () => {
+        $http.get('api/automobile.json')
+          .then((res) => {
+            $scope.automobiles = Object.keys(res.data);
 
-<!-- First Name: <input type="text" ng-model="firstName"><br>
-Last Name: <input type="text" ng-model="lastName"><br> -->
-<br>
-<div data-ng-repeat="data in products">
-  {{data.product_name}}
-</div>
-<hr>
-<div>
-  show
-  {{greeting}}
-</div>
+            // $scope.fuels = Object.keys(res.data);             
 
-</div>
+            // for (let index = 0; index < $scope.automobiles.length; index++) {
+            //   const element = $scope.automobiles[index];
+            //   // console.log(element)
 
-<script>
-var app = angular.module('myApp', []);
-app.controller('myCtrl', function($scope,$http) {
-  $scope.getProducts = () => {
-    $http.get("api/getProducts.php").then((Response) => {
-      $scope.products = Response.data;
-      // console.log(Response)
-    })
-  }
-  $scope.greeting="heloo";
+            // }            
+          });
+      }
+      $scope.check();
 
-  // $scope.showProduct = (product) => {
-  //   let show_products = {
-  //     method: 'POST',
-  //     url: 'api/showProduct.php',
-  //     data: {
-  //       id: 1
-  //     }
-  //   };
-  //   $http(show_products).then((res) => {
-  //     data = res.data;
-  //     // console.log(data[0].fineness);
-  //     $scope.show_fineness = data[0].fineness;
-  //     $scope.show_strength = data[0].compressive_strength;
-  //     $scope.show_color = data[0].color;
-  //     $scope.show_weight = data[0].weight;
-  //     $scope.show_application = data[0].application;
-  //     $scope.show_packaging_type = data[0].packaging_type;
-  //   });
+      $scope.getProducts = () => {
+        $http.get("api/getProducts.php").then((Response) => {
+          $scope.products = Response.data;
+          // console.log(Response)
+        })
 
-  //   $scope.show_product_name = product.product_name;
-  //   $scope.show_quantity = product.quantity;
-  //   $scope.show_amount = product.amount;
-  //   $scope.show_manufacturer = product.manufacturer;
-  //   $scope.show_created_at = product.created_at;
-  //   $scope.show_product_id = product.id;
-  //   // alert(product.product_name);
-  //   console.log('okay');
-  // }
+      }
 
-  $scope.getProducts();
-});
-</script>
+      $scope.getProducts();
+    });
+  </script> -->
 
 </body>
+
 </html>

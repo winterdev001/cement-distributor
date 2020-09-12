@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KIKU</title>
+  <!-- links -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="assets/themify-icons-font/themify-icons/themify-icons.css">
+  <!-- <link rel="stylesheet" href="assets/fontawesome-free-5.13.0-web/fontawesome-free-5.13.0-web/css/all.min.css"> -->
+  <!-- CSS only -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+  <!-- JS, Popper.js, and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+    crossorigin="anonymous"></script>
+  <!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/checkout.css">
+</head>
+
+<body ng-app="myApp" ng-controller="myCtlr">
+  <header>
+    <!-- <div include-html="inc/navigation.html"></div> -->
+    <nav class="navbar navbar-expand-lg navbar-light navigation">
+      <a class="navbar-brand" href="#">
+        <span class="font-weight-bold p-2 text-center mx-auto nav-brand-txt nav-text">KIKU</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item home ">
+            <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item products">
+            <a class="nav-link" href="shop.html">Products</a>
+          </li>
+          <li class="nav-item about">
+            <a class="nav-link" href="about.html">About</a>
+          </li>
+          <li class="nav-item contacts">
+            <a class="nav-link" href="contact.html">Contact</a>
+          </li>
+          <li class="nav-item account active" id="accountok">
+            <a class="nav-link" href="userdash.html">Account</a>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0 ml-auto search-form">
+          <ul class="navbar-nav" ng-show="loggedin">
+            <li class="nav-item ">
+              <a class="nav-link" href=""><img src="images/user.png" class="mr-1 d-header-icon ">{{username}} </a>
+            </li>
+            <li class="nav-item signup">
+              <a class="nav-link" href="" ng-click="logout()">Logout</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav" ng-show="notuser">
+            <li class="nav-item login">
+              <a class="nav-link" href="login.html">SignIn </a>
+            </li>
+            <li class="nav-item signup">
+              <a class="nav-link" href="signup.html">/SignUp</a>
+            </li>
+          </ul>
+          <input class="form-control mr-sm-2 search-input rounded-pill" type="search" placeholder="Search ..."
+            aria-label="Search">
+          <!-- <button class="btn btn-outline-success my-2 my-sm-0 search-btn" type="submit">Search</button> -->
+        </form>
+      </div>
+    </nav>
+    <style>
+      /* breadcrumbs */
+      .breadcrumb>.breadcrumb-item>a {
+        color: black !important;
+      }
+
+      /* / .breadcrumbs */
+      .d-header-icon {
+        width: 20px;
+        height: 20px;
+      }
+    </style>
+  </header>
+  <!-- breadcrumbs -->
+  <div class="container mt-5 mb-5">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb ">
+        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Account</li>
+        <ol class="breadcrumb ml-auto" ng-show="loggedin">
+          <li class="breadcrumb-item ">
+            <a class="" href=""><img src="images/user.png" class="mr-1 d-header-icon ">{{username}} </a>
+          </li>
+          <li class="breadcrumb-item signup">
+            <a class="" href="" ng-click="logout()">Logout</a>
+          </li>
+        </ol>
+      </ol>
+    </nav>
+  </div>
+  <!-- / .breadcrumbs -->
+  <!-- content -->
+  <div class="cont mt-2 mb-3">
+    <!-- check out -->
+    <div class="cont">
+      <div class="title">
+        <h2>Order address and payment Information</h2>
+      </div>
+      <div class="dd-flex">
+        <form class="order" action="" method="">
+          <label>
+            <span class="fname">First Name <span class="required">*</span></span>
+            <input type="text" name="fname" ng-model="first_name">
+          </label>
+          <label>
+            <span class="lname">Last Name <span class="required">*</span></span>
+            <input type="text" name="lname" ng-model="last_name">
+          </label>
+          <label>
+            <span>Company Name (Optional)</span>
+            <input type="text" name="cn" ng-model="company_name">
+          </label>
+          <!-- <label>
+            <span>Country <span class="required">*</span></span>
+            <select name="selection" class="form-control">
+              <option value="RWA">Rwanda</option>
+            </select>
+          </label> -->
+          <div class="mt-4">
+            <div class="row">
+              <div class="col-md-3">
+                <span class="ml-3">Country <span class="required">*</span></span>
+              </div>
+              <div class="col-md-8">
+                <select class=" col-12"  ng-model="country">
+                  <option value="RWA" selected>Rwanda</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <div class="row">
+              <div class="col-md-3">
+                <span class="ml-3">Province <span class="required">*</span></span>
+              </div>
+              <div class="col-md-8">
+                <!-- <input type="text" name="city"> -->
+                <select class="" ng-model="l_province"
+                  ng-options="address.PROVINCE for address in addresses | unique : 'PROVINCE'"
+                  ng-change="getDistrict(l_province.PROVINCE)">
+                  <option value="">Province</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4">
+            <div class="row">
+              <div class="col-md-3">
+                <span class="ml-3">District <span class="required">*</span></span>
+              </div>
+              <div class="col-md-8">
+                <!-- <input type="text" name="city"> -->
+                <select class="" ng-model="l_district" ng-options="district.district for district in districts "
+                  ng-change="getSector(l_province.PROVINCE,l_district.district)">
+                  <option value="">District</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4">
+            <div class="row">
+              <div class="col-md-3">
+                <span class="ml-3">Sector <span class="required">*</span></span>
+              </div>
+              <div class="col-md-8">
+                <!-- <input type="text" name="city"> -->
+                <select class="" ng-model="l_sector" ng-options="sector.sector for sector in sectors"
+                  ng-change="getCell(l_province.PROVINCE,l_district.district,l_sector.sector)">
+                  <option value="">Sector</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4">
+            <div class="row">
+              <div class="col-md-3">
+                <span class="ml-3">Cell <span class="required">*</span></span>
+              </div>
+              <div class="col-md-8">
+                <!-- <input type="text" name="city"> -->
+                <select class="" ng-model="l_cell" ng-options="cell.cell for cell in cells"
+                  ng-change="getVillage(l_province.PROVINCE,l_district.district,l_sector.sector,l_cell.cell)">
+                  <option value="">Cell</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4">
+            <div class="row">
+              <div class="col-md-3">
+                <span class="ml-3">Village <span class="required">*</span></span>
+              </div>
+              <div class="col-md-8">
+                <!-- <input type="text" name="city"> -->
+                <select class="" ng-model="l_village" ng-options="village.name for village in villages">
+                  <option value="">Village</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <label>
+            <span>Street Address <span class="required">*</span></span>
+            <input type="text" name="houseadd" ng-model="street" placeholder="House number or street number" required>
+          </label>
+
+          <label>
+            <span>Phone <span class="required">*</span></span>
+            <input type="tel" name="city" ng-model="phone">
+          </label>
+          <label>
+            <span>Email Address <span class="required">*</span></span>
+            <input type="email" name="city" ng-model="email">
+          </label>
+        </form>
+        <div class="Yorder">
+          <table class="table table-stripped">
+            <h3 class="text-center">Your Cart</h3>
+            <thead>
+              <th></th>
+              <th colspan="2">Price</th>
+              <th>Qty</th>
+              <th>Total</th>
+            </thead>
+            <tbody>
+              <tr ng-repeat="ctp in ctproducts">
+                <td>{{ctp.product_name}}</td>
+                <td colspan="2" class="text-grin">{{ctp.amount |currency : value ="":0}}</td>
+                <td>{{ctp.quantity}}</td>
+                <td class="text-grin">{{ctp.amount * ctp.quantity |currency : value ="":0}}</td>
+              </tr>
+              <tr>
+                <td colspan="3"><span class="float-right">Subtotal:</span></td>
+                <td>{{cart_total |currency : value ="":0}}</td>
+                <td><a href="editCart.html" class="text-decoration-none btn btn-blu">Edit Cart</a></td>
+              </tr>
+              <tr>
+                <td colspan="3" class="centered-td" style="text-align:center">Shipping</td>
+                <td colspan="2" class="text-grin">{{shipping |currency : value ="":0}}Rwf / pkg</td>
+              </tr>
+              <tr>
+                <td colspan="3" class="centered-td" style="text-align:center"><span class="">Grand Total</span></td>
+                <td colspan="2" class="text-grin">{{grandTotal | currency : value =""}}Rwf</td>
+              </tr>
+            </tbody>
+          </table><br>
+          <div>
+            <span><b>Payment :</b></span>
+            <input class="ml-5" type="radio" name="dbt" value="cd" checked> Cash on Delivery
+          </div>
+          <div class="text-center">
+            <button class="btn btn-grin btn-pill text-light"
+              ng-click="checkOut(first_name,last_name,company_name,country,l_province.PROVINCE,l_district.district,l_sector.sector,l_cell.cell,l_village.name,street,phone,email)">Place
+              Order</button>
+          </div>
+        </div><!-- Yorder -->
+      </div>
+    </div>
+    <!-- <button ng-click="check()">check</button> -->
+    <!-- end checkout -->
+  </div>
+  <!-- / .content -->
+
+  <div class="to-top">
+    <a href="#" onclick="topFunction()" id="myBtn" title="Go to top">
+      <span class="d-flex align-content-center"><i class="fa fa-chevron-up"></i></span>
+    </a>
+  </div>
+  <!-- footer -->
+  <div include-html="inc/footer.html"></div>
+  <!-- / .footer -->
+  <!-- scripts -->
+  <script src="js/app.js"></script>
+  <script src="js/angular.min.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/sweetalert1.js"></script>
+  <script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtlr', function ($scope, $http, $window, getLocations, $filter) {
+      if (localStorage.getItem('username') != null) {
+        $scope.username = localStorage.getItem('username');
+        $scope.loggedin = true;
+        $scope.notuser = false;
+      } else {
+        $scope.loggedin = false;
+        $scope.notuser = true;
+      }
+
+      $scope.logout = () => {
+        $scope.loggedin = false;
+        $scope.notuser = true;
+        if (localStorage.getItem('username') != null) {
+          var removeUser = localStorage.removeItem('username');
+          // $window.location.href = "./dashboard/dash.html";
+        }
+        $window.location.href = "api/logout.php";
+      }
+
+      $scope.getAddress = () => {
+        $http.get("api/address.json").then((response) => {
+          $scope.addresses = response.data;
+          // $scope.districtz = response.data;
+          // console.log(response.data)
+        });
+      }
+      $scope.getAddress();
+      $scope.shipping = 0;
+      $scope.grandTotal = 0;
+      $scope.getDistrict = (input) => {
+        $http.get('api/getAllTotals.php').then((response) => {
+          if (input == 'Kigali Town/Umujyi wa Kigali') {
+            $scope.shipping = 2000;
+            $scope.grandTotal = parseInt(response.data[0].total_price) + ($scope.shipping * parseInt(response.data[0].total_qty));
+            // console.log($scope.grandTotal)
+          } else {
+            $scope.shipping = 5000;
+            $scope.grandTotal = parseInt(response.data[0].total_price) + ($scope.shipping * parseInt(response.data[0].total_qty));
+          }
+        });
+        let province = {
+          method: 'POST',
+          url: 'api/getActualLocation.php',
+          data: {
+            name: 'district',
+            prov: input
+          }
+        }
+        $http(province).then((res) => {
+          // console.log(res.data);
+          $scope.districts = res.data;
+
+        });
+      }
+
+      $scope.getSector = (prov, dist) => {
+        let sector = {
+          method: 'POST',
+          url: 'api/getActualLocation.php',
+          data: {
+            name: 'sector',
+            prov: prov,
+            dist: dist
+          }
+        }
+        $http(sector).then((res) => {
+          // console.log(res.data);
+          $scope.sectors = res.data;
+
+        });
+        // console.log(sector.data.name,sector.data.prov,sector.data.dist)     
+      }
+
+      $scope.getCell = (prov, dist, sect) => {
+        let cell = {
+          method: 'POST',
+          url: 'api/getActualLocation.php',
+          data: {
+            name: 'cell',
+            prov: prov,
+            dist: dist,
+            sect: sect
+          }
+        }
+        $http(cell).then((res) => {
+          // console.log(res.data);
+          $scope.cells = res.data;
+
+        });
+        // console.log(sector.data.name,sector.data.prov,sector.data.dist)     
+      }
+
+      $scope.getVillage = (prov, dist, sect, cell) => {
+        let village = {
+          method: 'POST',
+          url: 'api/getActualLocation.php',
+          data: {
+            name: 'village',
+            prov: prov,
+            dist: dist,
+            sect: sect,
+            cell: cell
+          }
+        }
+        $http(village).then((res) => {
+          // console.log(res.data);
+          $scope.villages = res.data;
+        });
+      }
+
+      // get cart products
+      $scope.getCartProducts = () => {
+        $http.get('api/getcartstatus.php').then((res) => {
+          if (res.data == 'No data') {
+            swal({
+              title: "No product choosen yet.",
+            });
+            $scope.shipping = 0;
+          } else {
+            $scope.ctproducts = res.data;
+            $scope.getCartTotal();
+          }
+        });
+      }
+      $scope.getCartProducts();
+
+      $scope.getCartTotal = () => {
+        $http.get('api/carttotal.php').then((response) => {
+          $scope.cart_total = response.data[0].total;
+          $scope.grandTotal = response.data[0].total;
+        });
+      }
+
+      $scope.getCartTotal();
+
+      $scope.checkOut = (fname, lname, cname, country, province, district, sector, cell, village, street, phone, email) => {
+        if (localStorage.getItem('username') == null) {
+          swal({
+            title: 'Sign in first to continue with checkout.',
+            icon: 'warning',
+            buttons: true
+          }).then((result) => {
+            if (result) {
+              $window.location.href = "login.html";
+            }
+          });
+        } else {
+          // if (fname || lname || province || district || sector || cell || village || street || phone || email == null) {
+          //   swal("Fill all field first.");
+          // } else {
+            console.log(fname, lname, cname, country, province, district, sector, cell, village, street, phone, email)
+          // }
+        }
+      }
+
+    });
+
+    // sum of column or key
+    app.filter('sumByKey', function () {
+      return function (data, key) {
+        if (typeof (data) === 'undefined' || typeof (key) === 'undefined') {
+          return 0;
+        }
+
+        var sum = 0;
+        for (var i = data.length - 1; i >= 0; i--) {
+          sum += parseInt(data[i][key]);
+        }
+
+        return sum;
+      };
+    });
+
+    app.factory('getLocations', function ($http) {
+      return {
+        locationGet: locationGet
+      }
+      function locationGet() {
+        return $http.get('api/address.json')
+      }
+    });
+
+    // here we define our unique filter
+    app.filter("unique", function () {
+      // we will return a function which will take in a collection
+      // and a keyname
+      return function (collection, keyname) {
+        // we define our output and keys array;
+        var output = [],
+          keys = [];
+
+        // we utilize angular's foreach function
+        // this takes in our original collection and an iterator function
+        angular.forEach(collection, function (item) {
+          // we check to see whether our object exists
+          var key = item[keyname];
+          // if it's not already part of our keys array
+          if (keys.indexOf(key) === -1) {
+            // add it to our keys array
+            keys.push(key);
+            // push this item to our final output array
+            output.push(item);
+          }
+        });
+        // return our array which should be devoid of
+        // any duplicates
+        return output;
+      };
+    });
+
+    // here we define our unique filter
+    // app.filter("correspond", function (getLocations) {
+    //   // we will return a function which will take in a collection
+    //   // and a keyname
+    //   return function (input) {
+    //     // we define our output and keys array;
+    //     var output = {};
+    //     // keys = [];
+
+    //     // we utilize angular's foreach function
+    //     // this takes in our original collection and an iterator function
+    //     getLocations.locationGet().then((res) => {
+    //       angular.forEach(res.data.PROVINCE, function (item) {
+    //         // we check to see whether our object exists
+    //         // var key = item[keyname];
+    //         // if it's not already part of our keys array
+    //         if (input == item) {
+    //           // add it to our keys array
+    //           // keys.push(key);
+    //           // push this item to our final output array
+    //           output.push(res.data.DISTRICT);
+    //         }
+    //       });
+    //       // return our array which should be devoid of
+    //       // any duplicates
+    //       return output;
+    //     });
+
+    //   };
+    // });
+  </script>
+  <style>
+    /* back to top button */
+
+    #myBtn {
+      width: 50px;
+      height: 50px;
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 30px;
+      z-index: 99;
+      border: none;
+      outline: none;
+      font-size: 25px !important;
+      color: white;
+      cursor: pointer;
+      padding: 10px 10px 10px 11px;
+      border-radius: 50%;
+      box-shadow: 1px 1px 5px #000;
+      background-color: #00c292;
+      text-decoration: none;
+    }
+
+    #myBtn:hover {
+      background-color: #a4a4a4;
+    }
+
+    /* / .back to top */
+  </style>
+  <script>
+    // back to top button
+
+    window.onscroll = function () { scrollFunction() };
+
+    function scrollFunction() {
+      if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        document.getElementById("myBtn").style.display = "block";
+      } else {
+        document.getElementById("myBtn").style.display = "none";
+      }
+    }
+
+    function topFunction() {
+      $('html,body').animate({ scrollTop: 0 }, 1000);
+    }
+    // /.back to top button
+  </script>
+
+  <!-- pagination -->
+  <script>
+    const firstLinks = document.querySelectorAll(".first a");
+    const thirdLinks = document.querySelectorAll(".third a");
+
+    // JS code needed for first pagination effect
+    firstLinks.forEach((link) => {
+      link.addEventListener("mouseover", mouseOverEvent);
+      link.addEventListener("mouseleave", mouseLeaveEvent);
+    });
+
+    function mouseOverEvent(e) {
+      firstLinks.forEach((link) => {
+        link.style.opacity = 0.7;
+      });
+
+      e.target.style.opacity = 1;
+      e.target.style.transform = "scale(1.2)";
+    }
+
+    function mouseLeaveEvent(e) {
+      firstLinks.forEach((link) => {
+        link.style.opacity = 1;
+        e.target.style.transform = "scale(1)";
+      });
+    }
+  </script>
+  <!-- / .pagination -->
+
+</body>
+
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KIKU</title>
+  <!-- links -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="assets/themify-icons-font/themify-icons/themify-icons.css">
+  <!-- <link rel="stylesheet" href="assets/fontawesome-free-5.13.0-web/fontawesome-free-5.13.0-web/css/all.min.css"> -->
+  <!-- CSS only -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+  <!-- JS, Popper.js, and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+    crossorigin="anonymous"></script>
+  <!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
+  <link rel="stylesheet" href="css/app.css">
+  <!-- <link rel="stylesheet" href="css/checkout.css"> -->
+</head>
+
+<body ng-app="myApp" ng-controller="myCtlr">
+  <header>
+    <!-- <div include-html="inc/navigation.html"></div> -->
+    <nav class="navbar navbar-expand-lg navbar-light navigation">
+      <a class="navbar-brand" href="#">
+        <span class="font-weight-bold p-2 text-center mx-auto nav-brand-txt nav-text">KIKU</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item home ">
+            <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item products">
+            <a class="nav-link" href="shop.html">Products</a>
+          </li>
+          <li class="nav-item about">
+            <a class="nav-link" href="about.html">About</a>
+          </li>
+          <li class="nav-item contacts">
+            <a class="nav-link" href="contact.html">Contact</a>
+          </li>
+          <li class="nav-item account active" id="accountok">
+            <a class="nav-link" href="userdash.html">Account</a>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0 ml-auto search-form">
+
+          <!-- <ul class="navbar-nav" ng-show="notuser">
+            <li class="nav-item login">
+              <a class="nav-link" href="login.html">SignIn </a>
+            </li>
+            <li class="nav-item signup">
+              <a class="nav-link" href="signup.html">/SignUp</a>
+            </li>
+          </ul> -->
+          <input class="form-control mr-sm-2 search-input rounded-pill" type="search" placeholder="Search ..."
+            aria-label="Search">
+          <!-- <button class="btn btn-outline-success my-2 my-sm-0 search-btn" type="submit">Search</button> -->
+        </form>
+      </div>
+    </nav>
+    <style>
+      /* breadcrumbs */
+      .breadcrumb>.breadcrumb-item>a {
+        color: black !important;
+      }
+
+      /* / .breadcrumbs */
+      .d-header-icon {
+        width: 20px;
+        height: 20px;
+      }
+
+      .edit-qty {
+        width: 3rem;
+      }
+    </style>
+  </header>
+  <!-- breadcrumbs -->
+  <div class="container mt-5 mb-5">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb ">
+        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Cart</li>
+        <ol class="breadcrumb ml-auto" ng-show="loggedin">
+          <li class="breadcrumb-item ">
+            <a class="" href=""><img src="images/user.png" class="mr-1 d-header-icon ">{{username}} </a>
+          </li>
+          <li class="breadcrumb-item signup">
+            <a class="" href="" ng-click="logout()">Logout</a>
+          </li>
+        </ol>
+      </ol>
+    </nav>
+  </div>
+  <!-- / .breadcrumbs -->
+  <!-- content -->
+  <div class="container mt-2 mb-3">
+    <!-- check out -->
+    <div class="container">
+      <div class="card bg-light">
+        <div class="card-body">
+          <table class="table table-stripped">
+            <h3>Your Cart</h3>
+            <thead>
+              <th><strong>Product</strong></th>
+              <th><strong>Price</strong></th>
+              <th><strong>Quantity</strong></th>
+              <th><strong>Total</strong></th>
+              <th></th>
+            </thead>
+            <!-- <tr>
+              <th colspan="5" style="text-align: center;">Your order</th>
+            </tr> -->
+            <tbody>
+              <tr ng-repeat="ctp in ctproducts">
+                <td>{{ctp.product_name }}</td>
+                <td>{{ctp.amount |currency : value ="":0}}</td>
+                <td><input type="text" class="form-control edit-qty" ng-change="updateCartQty(ctp.id,ctp.quantity)"
+                    ng-model="ctp.quantity"></td>
+                <td>{{ctp.amount * ctp.quantity|currency : value ="":0}}</td>
+                <td><button class="btn btn-warning" ng-click="rmvProdFrmCart(ctp.id)">X</button></td>
+              </tr>
+              <tr>
+                <td colspan="3"><span class="float-right">Subtotal:</span></td>
+                <td>{{cart_total |currency : value ="":0}} Rwf</td>
+                <td>
+                  <button class="btn btn-light text-danger" ng-click="clearCart()">Empty Cart</button>                  
+                </td>
+              </tr>
+              <tr>
+                <td colspan="4" class="centered-td" style="text-align:right"><a href="shop.html" class="btn btn-secondary">Continue Shopping</a></td>
+                <td colspan="2"><a href="checkout.html" class="btn  btn-grin">Checkout</a></td>                
+              </tr>              
+            </tbody>
+          </table><br>
+          <div>
+            <span class="float-right">Shipping and Taxes calculated at checkout.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <button ng-click="check()">check</button> -->
+    <!-- end checkout -->
+  </div>
+  <!-- / .content -->
+
+  <div class="to-top">
+    <a href="#" onclick="topFunction()" id="myBtn" title="Go to top">
+      <span class="d-flex align-content-center"><i class="fa fa-chevron-up"></i></span>
+    </a>
+  </div>
+  <!-- footer -->
+  <div include-html="inc/footer.html"></div>
+  <!-- / .footer -->
+  <!-- scripts -->
+  <script src="js/app.js"></script>
+  <script src="js/angular.min.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/sweetalert1.js"></script>
+  <script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtlr', function ($scope, $http, $window) {
+      if (localStorage.getItem('username') != null) {
+        $scope.username = localStorage.getItem('username');
+        $scope.loggedin = true;
+        $scope.notuser = false;
+      } else {
+        $scope.loggedin = false;
+        $scope.notuser = true;
+      }
+
+      $scope.logout = () => {
+        $scope.loggedin = false;
+        $scope.notuser = true;
+        if (localStorage.getItem('username') != null) {
+          var removeUser = localStorage.removeItem('username');
+          // $window.location.href = "./dashboard/dash.html";
+        }
+        $window.location.href = "api/logout.php";
+      }      
+
+      // get cart products
+      $scope.getCartProducts = () => {
+        $http.get('api/getcartstatus.php').then((res) => {
+          if (res.data == 'No data') {
+            swal({
+              title: "No product choosen yet.",
+            });
+            $scope.shipping = 0;
+          } else {
+            $scope.ctproducts = res.data;
+            $scope.getCartTotal();
+          }
+        });
+      }
+      $scope.getCartProducts();
+
+      $scope.getCartTotal = () => {
+        $http.get('api/carttotal.php').then((response) => {
+          $scope.cart_total = response.data[0].total;
+          $scope.grandTotal = response.data[0].total;
+        });
+      }
+
+      $scope.getCartTotal();
+
+
+      $scope.rmvProdFrmCart = (id) => {
+        let selected_products = {
+          method: 'POST',
+          url: 'api/removecartproduct.php',
+          data: {
+            'id': id
+          }
+        }
+        if (id != null) {
+          swal({
+            title: "Are you sure?",
+            // text: "Once deleted, you will not be able to recover this imaginary file!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+          }).then((result) => {
+            if (result) {
+              $http(selected_products).then((res) => {
+                if (res.data == 'done') {
+                  swal("Deleted!", {
+                    icon: "success",
+                  }).then((result) => {
+                    $scope.getCartProducts();
+                    $scope.initialCart();
+                    // $scope.CalculateSum();
+                  });
+                } else if (res.data == 'no data left') {
+                  swal("Deleted!", {
+                    icon: "success",
+                  }).then((result) => {
+                    $("#cart_status").modal('hide');
+                    $window.location.reload();
+                  });
+                } else {
+                  swal({ text: res.data });
+                }
+              })
+            }
+          })
+        }
+      }
+
+      $scope.clearCart = () => {
+        swal({
+          title: "Are you sure?",
+          text: "All selected products will be romoved.",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        }).then((result) => {
+          if (result) {
+            $http.get('api/clearcart.php').then((res) => {
+              if (res.data == 'done') {
+                swal("Removed!", {
+                  icon: "success",
+                }).then((result) => {
+                  $("#cart_status").modal('hide');
+                  $window.location.reload();
+                });
+              } else {
+                swal({ text: res.data });
+              }
+            })
+          }
+        })
+      }
+
+      $scope.updateCartQty = (id, qty) => {
+        console.log(id, qty);
+        if (qty < 10) {
+          swal({ text: "Quantity can not go beyond 10, if not changed quantiy will be set to 10 by default", icon: "warning" });
+        } else {
+          let cart_updates = {
+            method: 'POST',
+            url: 'api/updatecart.php',
+            data: {
+              id: id,
+              qty: qty
+            }
+          }
+
+          $http(cart_updates).then((response) => {
+            if (response.data == 'done') {
+              $scope.getCartProducts();
+              $scope.initialCart();
+              $scope.getDistrict($scop);
+            } else {
+              swal("failed");
+            }
+          });
+        }
+      }
+    });
+
+  </script>
+  <style>
+    /* back to top button */
+
+    #myBtn {
+      width: 50px;
+      height: 50px;
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 30px;
+      z-index: 99;
+      border: none;
+      outline: none;
+      font-size: 25px !important;
+      color: white;
+      cursor: pointer;
+      padding: 10px 10px 10px 11px;
+      border-radius: 50%;
+      box-shadow: 1px 1px 5px #000;
+      background-color: #00c292;
+      text-decoration: none;
+    }
+
+    #myBtn:hover {
+      background-color: #a4a4a4;
+    }
+
+    /* / .back to top */
+  </style>
+  <script>
+    // back to top button
+
+    window.onscroll = function () { scrollFunction() };
+
+    function scrollFunction() {
+      if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        document.getElementById("myBtn").style.display = "block";
+      } else {
+        document.getElementById("myBtn").style.display = "none";
+      }
+    }
+
+    function topFunction() {
+      $('html,body').animate({ scrollTop: 0 }, 1000);
+    }
+    // /.back to top button
+  </script>
+
+  <!-- pagination -->
+  <script>
+    const firstLinks = document.querySelectorAll(".first a");
+    const thirdLinks = document.querySelectorAll(".third a");
+
+    // JS code needed for first pagination effect
+    firstLinks.forEach((link) => {
+      link.addEventListener("mouseover", mouseOverEvent);
+      link.addEventListener("mouseleave", mouseLeaveEvent);
+    });
+
+    function mouseOverEvent(e) {
+      firstLinks.forEach((link) => {
+        link.style.opacity = 0.7;
+      });
+
+      e.target.style.opacity = 1;
+      e.target.style.transform = "scale(1.2)";
+    }
+
+    function mouseLeaveEvent(e) {
+      firstLinks.forEach((link) => {
+        link.style.opacity = 1;
+        e.target.style.transform = "scale(1)";
+      });
+    }
+  </script>
+  <!-- / .pagination -->
+
+</body>
+
+</html>
