@@ -84,6 +84,9 @@
         width: 20px;
         height: 20px;
       }
+      .account-cart {
+        font-size: 1.4rem !important;
+      }
     </style>
   </header>
   <!-- breadcrumbs -->
@@ -92,6 +95,23 @@
       <ol class="breadcrumb ">
         <li class="breadcrumb-item"><a href="index.html">Home</a></li>
         <li class="breadcrumb-item active" aria-current="page">Account</li>
+        <ol class="breadcrumb ml-auto">
+          <li class="breadcrumb-item" ng-click="getCartProducts()">
+            <!-- <a class="" href=""> </a> -->
+            <div class="dropdown show">
+              <a class="btn btn-secondary dropdown-toggle " href="#" role="button" id="dropdownMenuLink"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="account-cart">
+                  <i class="ti-shopping-cart "></i> | <span class="badge badge-light ">{{cart_items}}</span>
+                </span>
+
+              </a>
+
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="checkout.html">Checkout</a>
+              </div>
+            </div>
+          </li>
+        </ol>
         <ol class="breadcrumb ml-auto" ng-show="loggedin">
           <li class="breadcrumb-item ">
             <a class="" href=""><img src="images/user.png" class="mr-1 d-header-icon ">{{username}} </a>
@@ -104,7 +124,7 @@
     </nav>
   </div>
   <!-- / .breadcrumbs -->
-  <!-- content -->  
+  <!-- content -->
   <div class="container mt-2 mb-3">
     Welcome {{username}}
   </div>
@@ -125,6 +145,20 @@
   <script>
     var app = angular.module('myApp', []);
     app.controller('myCtlr', function ($scope, $http, $window) {
+
+      $scope.initialCart = () => {
+        $http.get('api/getcartstatus.php').then((res) => {
+          if (res.data == 'No data') {
+            $scope.cart_items = 0;
+            // console.log($scope.cart_items)
+          } else {
+            $scope.cart_items = res.data.length;
+            // console.log(res.data)
+          }
+        });
+      }
+      $scope.initialCart();
+
       if (localStorage.getItem('username') != null) {
         $scope.username = localStorage.getItem('username');
         $scope.loggedin = true;
