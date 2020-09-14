@@ -27,8 +27,19 @@ app.controller('myCtrl', function ($scope, $http, $window) {
       };
       let request = $http(config);
       request.then((response) => {
-        if (response.data == 'registered') {
-          $window.location.href = "userdash.html";
+        if (response.data != 'admin') {
+          let uname = response.data;
+          if (localStorage.getItem('username') == null) {
+            var addUser = localStorage.setItem('username', uname);
+            $window.location.href = "userdash.html";
+          } else {
+            localStorage.removeItem('username');
+            var addUser = localStorage.setItem('username', uname)
+            $window.location.href = "userdash.html";
+            // var getId = localStorage.getItem('id');
+            // console.log(getId);
+          }
+          // $window.location.href = "userdash.html";
         }
         else if (response.data == 'empty') {
           swal({
@@ -105,7 +116,7 @@ var app = angular.module('userDash', []);
 app.controller('myCtrl', function ($scope, $http, $window) {
   $scope.get_user_info = () => {
     $http.get("api/customerinfo.php").then((Response) => {
-      data = Response.data;      
+      data = Response.data;
       $scope.customer_name = data[0].username;
       // console.log(Response.data);
     })

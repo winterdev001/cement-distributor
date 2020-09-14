@@ -17,7 +17,7 @@ $q=mysqli_query($con,$r);
 $row=mysqli_fetch_array($q);
 if($row['email']==$uemail || $row['username']==$uemail){
   if($row['blocked']==1){
-    echo "Your account have been blocked,please contact us(+711223344) for more informarion!";
+    echo "Your account have been blocked,please contact us(0711223344) for more informarion!";
   }
   if($row['password']==$pass){    
     @session_start();

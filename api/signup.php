@@ -31,16 +31,16 @@ else{
   $ins="INSERT INTO `customers`(`username`,`Fname`,`Sname`,`phone`,`email`,`password`) VALUES ('$uname','$fname','$sname','$cntct','$uemail','$password')";
   $ibq=mysqli_query($conn,$ins);  
   if($ibq){
-    $r="SELECT id FROM customers WHERE email='$uemail' OR username='$uemail' AND password='$password'";
+    $r="SELECT * FROM customers WHERE email='$uemail' OR username='$uemail' AND password='$password'";
     $q=mysqli_query($conn,$r);
     $row=mysqli_fetch_array($q);
     // $i="UPDATE customers SET count=count+1 WHERE email='$uemail'";
     // $dbq=mysqli_query($conn,$i);
     if($q){
       @session_start();
-      $_SESSION['USER_ID']=$row['id'];
-      $id=$_SESSION['USER_ID'];
-      echo 'registered';
+      $_SESSION['username']=$row['username'];
+      // $id=$_SESSION['USER_ID'];
+      echo $_SESSION['username'];
     }
   }
   else{
