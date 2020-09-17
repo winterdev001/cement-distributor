@@ -6,6 +6,22 @@
   $order = json_decode($getorder);
   $stat = $order->stat;
 
+  $get_email = "select email from customers where username = '$order->customer_name'";
+  $get_email_res = mysqli_query($conn,$get_email);
+  $email = mysqli_fetch_assoc($get_email_res);
+  $user_email = $email['email'];
+
+  // email
+    include('Mailin.php');
+    use Sendinblue\Mailin;
+    $api_key = '2FpIE6gqcKXkxVZy';
+    $from_email = 'snowdevin.sd@gmail.com';
+    $from_name = 'KIKU';
+
+    $to_email = $user_email;
+    $to_name = $order->customer_name ;
+    $subject = 'Order Placed Successfully!';
+
   if($stat == 'firstTime'){
     // new customers
     $cname = $order->cname;
@@ -51,8 +67,34 @@
         $result3 = mysqli_query($conn,$sql3);
       }    
       
-      if( $result2 && $result3){
-        echo ("done");
+      if( $result2 && $result3){        
+        $message = "<h1><span style='border:5px solid #00c292;margin: 0 auto;padding: 3px;'>KIKU</span></h1>
+        <h2>It’s ordered!</h2>
+        <p>Hi $customer_name,<br>
+        Thanks for your order!. It has been delivered so get ready to welcome it at your place soon.</p>
+        <p>
+        The following number will be used fulfilling the order with our delivery team<br>,
+        Order number :  #000$orderId,<br>
+        </p>  
+        <p>If there is anything we can do to make your experience better, do not hesitate to drop us a line at kiku@gmail.com. We are here to help you anytime! :)</p>
+        <p>Thanks,<br>
+        The KIKU team<p>";
+        $mailin = new Mailin('https://api.sendinblue.com/v2.0',$api_key);
+        $data = array( 
+          "to" => array($to_email=>$to_name),
+          "from" => array($from_email,$from_name),
+          "subject" => $subject,
+          "html" => $message,
+          "attachment" => array()
+        );
+        $response = $mailin->send_email($data);
+        if(isset($response['code']) && $response['code']=='success'){
+          echo 'Email Sent';
+        }else{
+          echo 'Email not sent';
+        }
+        exit;
+
       }else {
         echo "failed";
       }
@@ -94,7 +136,32 @@
       }    
       
       if( $result2 ){
-        echo ("done");
+        $message = "<h1><span style='border:5px solid #00c292;margin: 0 auto;padding: 3px;'>KIKU</span></h1>
+        <h2>It’s ordered!</h2>
+        <p>Hi $customer_name,<br>
+        Thank you again for your order!. It has been delivered so get ready to welcome it at your place soon.</p>
+        <p>
+        The following number will be used fulfilling the order with our delivery team<br>,
+        Order number :  #000$orderId,<br>
+        </p>  
+        <p>If there is anything we can do to make your experience better, do not hesitate to drop us a line at kiku@gmail.com. We are here to help you anytime! :)</p>
+        <p>Thanks,<br>
+        The KIKU team<p>";
+        $mailin = new Mailin('https://api.sendinblue.com/v2.0',$api_key);
+        $data = array( 
+          "to" => array($to_email=>$to_name),
+          "from" => array($from_email,$from_name),
+          "subject" => $subject,
+          "html" => $message,
+          "attachment" => array()
+        );
+        $response = $mailin->send_email($data);
+        if(isset($response['code']) && $response['code']=='success'){
+          echo 'Email Sent';
+        }else{
+          echo 'Email not sent';
+        }
+        exit;
       }else {
         echo "failed";
       }
