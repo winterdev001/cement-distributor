@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="css/shop.css">
 </head>
 
-<body ng-app="shop" ng-controller="shopCtrl">
+<body ng-app="shop" ng-controller="shopCtrl" ng-click="containerClicked()">
   <header>
     <nav class="navbar navbar-expand-lg navbar-light navigation">
       <a class="navbar-brand" href="#">
@@ -71,7 +71,12 @@
             </li>
           </ul>
           <input class="form-control mr-sm-2 search-input rounded-pill" type="search" placeholder="Search ..."
-            aria-label="Search">
+            aria-label="Search" ng-keyup='fetchProducts()' ng-model="search_q" ng-click='searchboxClicked($event);'>
+          <ul id='searchResult'>
+            <li ng-click="toShowProduct(result.id)" ng-repeat="result in searchResult">
+              {{ result.product_name }}
+            </li>
+          </ul>
           <!-- <button class="btn btn-outline-success my-2 my-sm-0 search-btn" type="submit">Search</button> -->
           <ul class="navbar-nav">
             <li class="nav-item " ng-click="getCartProducts()">
@@ -112,7 +117,7 @@
   </div> -->
   <!-- / .breadcrumbs -->
   <!-- content -->
-  <div class="container bg-light filter-section">
+  <!-- <div class="container bg-light filter-section">
     <div class="row">
       <div class="col-md-3 col-sm-12 col-xm-12">
         <span>All Products</span>
@@ -127,37 +132,75 @@
         </select>
       </div>
     </div>
-  </div>
-  <div class="container">
+  </div> -->
+  <div class="container ">
     <!-- filter inputs -->
-    <!-- <nav class="filter-nav nav navbar-nav mt-2 mb-5">
+    <nav class="filter-nav nav navbar-nav mt-2 mb-5 breadcrumb">
       <div>
-        <a href="" class="nav-brand my-auto"><span class="lead ">All products</span></a>
+        <!-- <a href="" class="nav-brand my-auto text-decoration-none"><span class="lead ">All products</span></a> -->
+        <!-- <div class="dropdown show">
+          <a class="text-decoration-none text-dark dropdown-toggle"  role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            All Products
+          </a>
+        
+          <div class="dropdown-menu mt-3" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" ng-repeat="cat in categories"  ng-click="getProductByCat(cat.id)">{{cat.category_name}}</a>            
+          </div>
+          <style>
+            .dropdown-menu {
+              /* width: 10rem; */
+              margin-left: -13px;
+            }
+            .dropdown-menu > a {
+              border-bottom: 2px solid #00c292;
+            }
+            .dropdown-menu > a:hover {
+              background-color: #00c292;
+              color: white;
+            }
+          </style>
+        </div> -->
+        <!-- <select ng-model="myColor" ng-options="cat.category_name for cat in categories">
+          <option value="all">All Products</option>
+        </select> -->
+        <select class="product_by_cat text-dark font-weight-bold" ng-model="selected_cat"
+          ng-options="cat.category_name for cat in categories" ng-change="getProductByCat(selected_cat.id)">
+          <option value="">All Products</option>
+        </select>
+        <style>
+          .product_by_cat {
+            border: none;
+            background-color: #94e0cd;
+            /* width: 10rem; */
+            /* color: black; */
+            padding: 3px;
+            border-radius: 3px;
+          }
+        </style>
       </div>
       <div class="filter-items ">
-        <div class="filter-item">
+        <!-- <div class="filter-item">
           <label for="filter-by" class="font-weight-bold">FILTER BY:</label>
           <select name="filter-by" id="filter-by" class=" ">
             <option value="1" selected>Rwadan</option>
             <option value="2">Kenyan</option>
             <option value="3">Tanzanian</option>
           </select>
-        </div>
+        </div> -->
         <div class="filter-item">
           <label for="sort-by" class="font-weight-bold">SORT BY:</label>
-          <select name="sort-by" id="sort-by" class=" ">
-            <option value="1" selected>Best Selling</option>
-            <option value="2">Date, New - Old</option>
-            <option value="2">Date, Old - New</option>
-            <option value="3">High - Low price</option>
-            <option value="4">Low - High price</option>
-            <option value="5">Alphebatically, A-Z</option>
-            <option value="5">Alphebatically, Z-A</option>
-            <option value="6">Feature</option>
+          <select name="sort-by" id="sort-by" class=" " ng-model="sort_by" ng-change="sort(sort_by)">
+            <option value="new_first" selected>Date, New - Old</option>
+            <option value="old_first">Date, Old - New</option>
+            <option value="high_first">High - Low price</option>
+            <option value="low_first">Low - High price</option>
+            <option value="atoz">Alphebatically, A-Z</option>
+            <option value="ztoa">Alphebatically, Z-A</option>
           </select>
         </div>
+        <!-- <div class="filter-item"><button class="btn btn-sm bg-grin text-light">Filter</button></div> -->
       </div>
-    </nav> -->
+    </nav>
 
     <!-- / .filter-inputs -->
 
@@ -165,7 +208,7 @@
     <div class="card  mb-5 mt-5">
       <div class="card-body">
         <div class="row row-cols-1 row-cols-md-4">
-          <div class="col mb-4" ng-repeat="product in products | orderBy:'-created_at'">
+          <div class="col mb-4" dir-paginate="product in products |itemsPerPage:20">
             <a href="" class="text-decoration-none ">
               <div class="card latest-product-card">
                 <div>
@@ -192,15 +235,20 @@
         <!-- pagination -->
         <section>
           <div class="pagination-section">
-            <ul class="pagination first">
-              <li><a href="#">Prev</a></li>
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
+            <!-- <ul class="pagination first"> -->
+            <!-- <li><a href="#">Prev</a></li> -->
+            <!-- <li><a>
+                  <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true">
+                  </dir-pagination-controls>
+                </a></li> -->
+            <!-- <li><a href="#">2</a></li>
               <li><a href="#">3</a></li>
               <li><a href="#">4</a></li>
               <li><a href="#">5</a></li>
-              <li><a href="#">Next</a></li>
-            </ul>
+              <li><a href="#">Next</a></li> -->
+            <!-- </ul> -->
+            <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true">
+            </dir-pagination-controls>
           </div>
         </section>
         <!-- / .pagination -->
@@ -271,16 +319,122 @@
   <script src="js/app.js"></script>
   <script src="js/angular.min.js"></script>
   <script src="js/sweetalert1.js"></script>
+  <script src="js/dirPaginate.js"></script>
   <!-- <script src="js/jquery.min.js"></script> -->
   <script>
-    var app = angular.module('shop', []);
+    var app = angular.module('shop', ['angularUtils.directives.dirPagination']);
 
-    app.controller('shopCtrl', function ($scope, $http, $window) {
+    app.controller('shopCtrl', function ($scope, $http, $window, $filter) {
+      // searh product
+      $scope.fetchProducts = function () {
+
+        var searchText_len = $scope.search_q.trim().length;
+
+        // Check search text length
+        if (searchText_len > 0) {
+          $http({
+            method: 'POST',
+            url: 'api/search_product.php',
+            data: { query: $scope.search_q }
+          }).then(function successCallback(response) {
+            $scope.searchResult = response.data;
+          });
+        } else {
+          $scope.searchResult = {};
+        }
+
+      }
+
+      // Set value to search box
+      $scope.setValue = function (index, $event) {
+        $scope.searchText = $scope.searchResult[index].product_name;
+        $scope.searchResult = {};
+        $event.stopPropagation();
+      }
+
+      $scope.searchboxClicked = function ($event) {
+        $event.stopPropagation();
+      }
+
+      $scope.containerClicked = function () {
+        $scope.searchResult = {};
+      }
+
+
       $scope.getProducts = () => {
         $http.get("api/getProducts.php").then((Response) => {
           $scope.products = Response.data;
           // console.log(Response.data)     
         })
+      }
+      $scope.getProducts();
+
+      $scope.sort = (sort_by) => {
+        // $http.get("api/getProducts.php").then((Response) => {
+        //   $scope.productz = Response.data;
+        //   // console.log(Response.data)  
+        //   if (sort_by == 'new_first') {
+        //     $scope.products = $filter('orderBy')($scope.productz, '-created_at');
+        //   } else if (sort_by == 'old_first') {
+        //     $scope.products = $filter('orderBy')($scope.productz, 'created_at');
+        //   }
+        //   else if (sort_by == 'high_first') {
+        //     $scope.products = $filter('orderBy')($scope.productz, '-amount');
+        //   }
+        //   else if (sort_by == 'low_first') {
+        //     $scope.products = $filter('orderBy')($scope.productz, 'amount');
+        //   }
+        //   else if (sort_by == 'atoz') {
+        //     $scope.products = $filter('orderBy')($scope.productz, 'product_name');
+        //   }
+        //   else if (sort_by == 'ztoa') {
+        //     $scope.products = $filter('orderBy')($scope.productz, '-product_name');
+        //   }
+        // })
+
+        var t = $scope.selected_cat
+        if (t == undefined) {
+          var cat_id = 0;
+        } else {
+          var cat_id = t.id;
+        }
+        $http({
+          method: 'POST',
+          url: 'api/sortnfilter.php',
+          data: {
+            cat_id: cat_id,
+            sort_by: sort_by
+          }
+        }).then((res) => {
+          $scope.products = res.data;
+          // console.log(res.data)
+        });
+        // console.log(cat_id,sort_by)
+      }
+
+      $scope.getCategories = () => {
+        $http.get('api/getCategories.php').then((res) => {
+          $scope.categories = res.data;
+        });
+      }
+      $scope.getCategories();
+
+      $scope.getProductByCat = (id) => {
+        if (id == undefined) {
+          $window.location.reload();
+        } else {
+          $http({
+            method: 'POST',
+            url: 'api/getproductsbycat.php',
+            data: {
+              cat_id: id
+            }
+          }).then((res) => {
+            $scope.products = res.data;
+            // console.log(res.data)
+          });
+        }
+        // console.log(id)
       }
 
       $scope.toShowProduct = (id) => {
@@ -298,8 +452,6 @@
         }
       }
 
-
-      $scope.getProducts();
 
       if (localStorage.getItem('username') != null) {
         $scope.username = localStorage.getItem('username');
@@ -495,12 +647,16 @@
             if (result) {
               $window.location.href = "login.html";
             }
-          });         
-        }else {
+          });
+        } else {
           $window.location.href = "checkout.html";
         }
-      }      
+      }
     })
+
+    app.config(function (paginationTemplateProvider) {
+      paginationTemplateProvider.setPath('customTemplate.html');
+    });
 
     app.directive('onError', function () {
       return {

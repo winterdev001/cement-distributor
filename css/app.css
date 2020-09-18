@@ -68,6 +68,32 @@ html {
   background-color: #0f6672 !important;
 }
 
+/* search */
+#searchResult{
+  list-style: none;
+  padding: 0px;
+  width: 200px;
+  position: absolute;
+  margin: 0;
+  top: 80%;
+  right: 6.2%;
+}
+
+#searchResult li{
+  background: lavender;
+  padding: 4px;
+  margin-bottom: 1px;
+}
+
+#searchResult li:nth-child(even){
+  background: #118d6e;
+  color: white;
+}
+
+#searchResult li:hover{
+  cursor: pointer;
+}
+/* // search */
 
 /* navigation */
 .fixed-header {

@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="css/contact.css">
 </head>
 
-<body ng-app = "myApp" ng-controller= "myCtlr">
+<body ng-app="myApp" ng-controller="myCtlr" ng-click="containerClicked()">
   <header>
     <div include-html="inc/navigation.html"></div>
   </header>
@@ -51,12 +51,12 @@
           <i class="ti-location-pin"></i>
           <p><span>KG700st. 12 Ave</span> Masoro(Freezone)</p>
         </div>
-  
+
         <div>
           <i class="ti-mobile"></i>
           <p>+250-700-111-222</p>
         </div>
-  
+
         <div>
           <i class="ti-email "></i>
           <p><a class="text-dark" href="mailto:salessupport@kiku.com">&nbsp; salessupport@kiku.com</a></p>
@@ -66,34 +66,34 @@
     </div>
 
     <!-- contact form -->
-      <div class="contact-form-section d-flex justify-content-center">
-        <div class="card mt-3 mb-5">
-          <div class="card-body">
-            <form action="">
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <input type="text" placeholder="Name" class="form-control">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <input type="email" placeholder="Email" class="form-control">
-                  </div>
-                </div>
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <textarea name="" id=""  rows="3" placeholder="Your messsage" class="form-control"></textarea>
-                  </div>
+    <div class="contact-form-section d-flex justify-content-center">
+      <div class="card mt-3 mb-5">
+        <div class="card-body">
+          <form action="">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <input type="text" placeholder="Name" class="form-control">
                 </div>
               </div>
-              <div class="text-center">
-                <button class="btn third-color contact-btn text-light">Send</button>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <input type="email" placeholder="Email" class="form-control">
+                </div>
               </div>
-            </form>
-          </div>
+              <div class="col-md-12">
+                <div class="form-group">
+                  <textarea name="" id="" rows="3" placeholder="Your messsage" class="form-control"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="text-center">
+              <button class="btn third-color contact-btn text-light">Send</button>
+            </div>
+          </form>
         </div>
       </div>
+    </div>
     <!-- / .contact fomr -->
   </div>
   <!-- / .content -->
@@ -176,6 +176,56 @@
           // $window.location.href = "./dashboard/dash.html";
         }
         $window.location.href = "api/logout.php";
+      }
+
+      // searh product
+      $scope.fetchProducts = function () {
+
+        var searchText_len = $scope.search_q.trim().length;
+
+        // Check search text length
+        if (searchText_len > 0) {
+          $http({
+            method: 'POST',
+            url: 'api/search_product.php',
+            data: { query: $scope.search_q }
+          }).then(function successCallback(response) {
+            $scope.searchResult = response.data;
+          });
+        } else {
+          $scope.searchResult = {};
+        }
+
+      }
+
+      // Set value to search box
+      $scope.setValue = function (index, $event) {
+        $scope.searchText = $scope.searchResult[index].product_name;
+        $scope.searchResult = {};
+        $event.stopPropagation();
+      }
+
+      $scope.searchboxClicked = function ($event) {
+        $event.stopPropagation();
+      }
+
+      $scope.containerClicked = function () {
+        $scope.searchResult = {};
+      }
+
+      $scope.toShowProduct = (id) => {
+        // $window.location.href = 'product_details.html';
+        // alert('hello')
+        if (localStorage.getItem('id') == null) {
+          var addId = localStorage.setItem('id', id);
+          $window.location.href = 'product_details.html';
+        } else {
+          localStorage.removeItem('id');
+          var addId = localStorage.setItem('id', id)
+          $window.location.href = 'product_details.html';
+          var getId = localStorage.getItem('id');
+          console.log(getId);
+        }
       }
     });
   </script>

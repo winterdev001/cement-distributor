@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="css/app.css">
 </head>
 
-<body ng-app="main-app" ng-controller="ProductController">
+<body ng-app="main-app" ng-controller="ProductController" ng-click='containerClicked()'>
     <header>
         <!-- <div include-html="inc/navigation.html"></div> -->
         <nav class="navbar navbar-expand-lg navbar-light navigation">
@@ -72,7 +72,13 @@
                         </li>
                     </ul>
                     <input class="form-control mr-sm-2 search-input rounded-pill" type="search" placeholder="Search ..."
-                        aria-label="Search">
+                        aria-label="Search" ng-keyup='fetchProducts()' ng-model="search_q"
+                        ng-click='searchboxClicked($event);'>
+                    <ul id='searchResult'>
+                        <li ng-click="toShowProduct(result.id)" ng-repeat="result in searchResult">
+                            {{ result.product_name }}
+                        </li>
+                    </ul>
                     <!-- <button class="btn btn-outline-success my-2 my-sm-0 search-btn" type="submit">Search</button> -->
                     <ul class="navbar-nav">
                         <li class="nav-item " ng-click="getCartProducts()">
@@ -94,6 +100,8 @@
                 width: 20px;
                 height: 20px;
             }
+
+
         </style>
     </header>
     <div class="carousel">
@@ -475,6 +483,43 @@
         var app = angular.module('main-app', []);
         app.controller('ProductController', function ($scope, $http, $window) {
             $scope.data = [];
+
+            // searh product
+            $scope.fetchProducts = function () {
+
+                var searchText_len = $scope.search_q.trim().length;
+
+                // Check search text length
+                if (searchText_len > 0) {
+                    $http({
+                        method: 'POST',
+                        url: 'api/search_product.php',
+                        data: { query: $scope.search_q }
+                    }).then(function successCallback(response) {
+                        $scope.searchResult = response.data;
+                    });
+                } else {
+                    $scope.searchResult = {};
+                }
+
+            }
+
+            // Set value to search box
+            $scope.setValue = function (index, $event) {
+                $scope.searchText = $scope.searchResult[index].product_name;
+                $scope.searchResult = {};
+                $event.stopPropagation();
+            }
+
+            $scope.searchboxClicked = function ($event) {
+                $event.stopPropagation();
+            }
+
+            $scope.containerClicked = function () {
+                $scope.searchResult = {};
+            }
+
+
 
             $scope.getfeed = () => {
                 $http.get("api/getData.php").then((Response) => {

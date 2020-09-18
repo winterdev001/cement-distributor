@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light navigation" >
+<nav class="navbar navbar-expand-lg navbar-light navigation">
   <a class="navbar-brand" href="#">
     <span class="font-weight-bold p-2 text-center mx-auto nav-brand-txt nav-text">KIKU</span>
   </a>
@@ -27,10 +27,10 @@
           <a class="nav-link" href=""><img src="images/user.png" class="mr-1 d-header-icon ">{{username}} </a>
         </li>
         <li class="nav-item signup">
-          <a class="nav-link" href=""  ng-click="logout()">Logout</a>
+          <a class="nav-link" href="" ng-click="logout()">Logout</a>
         </li>
       </ul>
-      <ul class="navbar-nav" ng-show="notuser" >
+      <ul class="navbar-nav" ng-show="notuser">
         <li class="nav-item login">
           <a class="nav-link" href="login.html">SignIn </a>
         </li>
@@ -39,7 +39,12 @@
         </li>
       </ul>
       <input class="form-control mr-sm-2 search-input rounded-pill" type="search" placeholder="Search ..."
-        aria-label="Search">
+        aria-label="Search" ng-keyup='fetchProducts()' ng-model="search_q" ng-click='searchboxClicked($event);'>
+      <ul id='searchResult'>
+        <li ng-click="toShowProduct(result.id)" ng-repeat="result in searchResult">
+          {{ result.product_name }}
+        </li>
+      </ul>
       <!-- <button class="btn btn-outline-success my-2 my-sm-0 search-btn" type="submit">Search</button> -->
       <!-- <ul class="navbar-nav"  >
         <li class="nav-item " ng-click="getCartProducts()">
