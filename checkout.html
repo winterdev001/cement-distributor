@@ -491,7 +491,7 @@
                 $scope.grandTotal = parseInt(response.data[0].total_price) + ($scope.shipping * parseInt(response.data[0].total_qty));
               }
             });
-            if(res.data[0].company = "no"){
+            if(res.data[0].company == "no"){
               $scope.company_in = 'No Company';
             }else{
               $scope.company_in = res.data[0].company;

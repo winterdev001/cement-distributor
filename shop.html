@@ -56,7 +56,8 @@
         <form class="form-inline my-2 my-lg-0 ml-auto search-form">
           <ul class="navbar-nav" ng-show="loggedin">
             <li class="nav-item ">
-              <a class="nav-link" href=""><img src="images/user.png" class="mr-1 d-header-icon ">{{username}} </a>
+              <a class="nav-link" href="userdash.html"><img src="images/user.png"
+                  class="mr-1 d-header-icon ">{{username}} </a>
             </li>
             <li class="nav-item signup">
               <a class="nav-link" href="" ng-click="logout()">Logout</a>
@@ -137,32 +138,6 @@
     <!-- filter inputs -->
     <nav class="filter-nav nav navbar-nav mt-2 mb-5 breadcrumb">
       <div>
-        <!-- <a href="" class="nav-brand my-auto text-decoration-none"><span class="lead ">All products</span></a> -->
-        <!-- <div class="dropdown show">
-          <a class="text-decoration-none text-dark dropdown-toggle"  role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            All Products
-          </a>
-        
-          <div class="dropdown-menu mt-3" aria-labelledby="dropdownMenuLink">
-            <a class="dropdown-item" ng-repeat="cat in categories"  ng-click="getProductByCat(cat.id)">{{cat.category_name}}</a>            
-          </div>
-          <style>
-            .dropdown-menu {
-              /* width: 10rem; */
-              margin-left: -13px;
-            }
-            .dropdown-menu > a {
-              border-bottom: 2px solid #00c292;
-            }
-            .dropdown-menu > a:hover {
-              background-color: #00c292;
-              color: white;
-            }
-          </style>
-        </div> -->
-        <!-- <select ng-model="myColor" ng-options="cat.category_name for cat in categories">
-          <option value="all">All Products</option>
-        </select> -->
         <select class="product_by_cat text-dark font-weight-bold" ng-model="selected_cat"
           ng-options="cat.category_name for cat in categories" ng-change="getProductByCat(selected_cat.id)">
           <option value="">All Products</option>
@@ -235,18 +210,6 @@
         <!-- pagination -->
         <section>
           <div class="pagination-section">
-            <!-- <ul class="pagination first"> -->
-            <!-- <li><a href="#">Prev</a></li> -->
-            <!-- <li><a>
-                  <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true">
-                  </dir-pagination-controls>
-                </a></li> -->
-            <!-- <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
-              <li><a href="#">Next</a></li> -->
-            <!-- </ul> -->
             <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true">
             </dir-pagination-controls>
           </div>
