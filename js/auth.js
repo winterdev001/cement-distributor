@@ -74,7 +74,7 @@ app.controller('myCtrl', function ($scope, $http, $window) {
         swal("Connection Error")
       });
       request.then((response) => {
-        if (response.data === "admin") {
+        if (response.data == "admin") {
           // console.log(response.data);
           let uname = response.data;
           if (localStorage.getItem('username') == null) {
@@ -87,7 +87,7 @@ app.controller('myCtrl', function ($scope, $http, $window) {
             // var getId = localStorage.getItem('id');
             // console.log(getId);
           }
-        } else if (response.data !== "Email or password is Incorrect") {
+        } else if (response.data != "Email or password is Incorrect") {
           // console.log(response.data);
           let uname = response.data;
           if (localStorage.getItem('username') == null) {

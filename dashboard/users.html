@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KIKU DASHBOARD</title>
+  <!-- links -->
+  <link rel="stylesheet" href="dashboard.css">
+  <!-- CSS only -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+</head>
+
+<body ng-app="admin" ng-controller="myCtrl">
+  <div class="content container-fluid">
+    <div class="row bg-dark">
+      <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12  side-navigation">
+        <div class="aside">
+          <!-- <h3>side</h3> -->
+          <nav class="side-nav">
+            <header>
+              <div class="profile">
+                <img src="../images/male-icon.png" alt="card-img-top" height="100" width="100">
+                <span class="text-light">{{username}}</span>
+                <div class="edit mx-auto">
+                  <span class="text-light"><a href="">Edit</a></span>
+                  <span class="text-light"><a href="" ng-click="logout()">Logout</a></span>
+                </div>
+              </div>
+            </header>
+
+            <ul class="side-nav-links">
+              <li><a href="dash.html">Dashboard</a></li>
+              <li><a href="products.html">Products</a></li>
+              <li><a href="orders.html"> Orders</a></li>
+              <li><a href="users.html" class="active"> Users</a></li>
+              <li><a ng-click="logout()">Logout</a></li>
+            </ul>
+
+          </nav>
+        </div>
+      </div>
+      <div class="col-lg-10 col-md-10 col-sm-6 col-xs-12 bg-light">
+        <div class="  ">
+          <div class="row mt-3 mb-2">
+            <div class="col-md-9">
+              <h3>Dashboard</h3>
+            </div>
+            <div class="col-md-3">
+              <div aria-label="breadcrumb">
+                <ol class="breadcrumb ">
+                  <li class="breadcrumb-item "><a class="text-dark" href="dash.html">Dashboard</a></li>
+                  <li class="breadcrumb-item " aria-current="page">Users</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+          <!-- content -->
+          <!-- users -->
+          <div class="animated fadeIn mt-5">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="row">
+                      <div class="col-md-10"><strong class="card-title">Users</strong></div>
+                      <div class="col-md-2">
+                        <div class="search ">
+                          <div class="float-right">
+                            <form action="">
+                              <input type="text" ng-model="search_in_users" class="form-control dash-search" placeholder="Search...">
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body ">
+                    <div class="table-responsive">
+                      <table id="bootstrap-data-table" class="table table-striped table-bordered  ">
+                        <thead>
+                          <!-- <tr>
+                            <th><button class="btn btn-danger" ng-click="deleteAll()">Delete Selected</button></th>
+                          </tr> -->
+                          <tr>
+                            <!-- <th>Select</th> -->
+                            <th>Username</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr class="table-huva" ng-repeat="user in users | filter:search_in_users | orderBy:'username'">
+                            <style>
+                              .table-huva:hover {
+                                background-color: #00c29267 !important;
+                              }
+                            </style>
+                            <!-- <td><input name="all" type="checkbox" ng-checked="product.id" /></td></td> -->
+                            <td>{{user.username}}</td>
+                            <td>{{user.Fname}}</td>
+                            <td>{{user.Sname}} </td>
+                            <td>{{user.email}}
+                            </td>
+                            <td>
+                              <span>{{user.phone}}</span>
+                            </td>
+                            <td>
+                              <button class="btn btn-blu" ng-click="showUser(user.id)">View</button>
+                              <button class="btn btn-danger" ng-click="deleteUser(user.id)">Delete</button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <!-- end users -->
+          <!-- end content -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- show user -->
+  <div class="modal fade show_product" id="show_user" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg show_user">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">User Details</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-5">
+              <img src="../images/customer.jpg" width="300" alt="card-img">
+            </div>
+            <div class="col-md-7">
+              <p class="card-text"><strong>Username : {{show_username}}</strong></p>
+              <p class="card-text ">First Name : {{show_fname}} </p>
+              <p class="card-text ">Last Name : {{show_sname}}</p>
+              <p class="card-text ">Email : {{show_email}} </p>
+              <p class="card-text ">Phone : {{show_phone}}</p>
+              <p class="card-text ">Company : {{show_company}}</p>
+              <p class="card-text ">Province : {{show_province}}</p>
+              <p class="card-text ">District : {{show_district}}</p>
+              <p class="card-text ">Sector : {{show_sector}}</p>
+              <p class="card-text ">Cell : {{show_cell}}</p>
+              <p class="card-text ">Village : {{show_village}}</p>
+              <p class="card-text ">Street : {{show_street}}</p>
+              <p class="card-text "><span class="text-muted">Date created : {{show_created_at}}</span></p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-warning" ng-if="show_blocked == 0" ng-click="blockUser(show_user_id)">Block</button>
+          <button class="btn btn-blu" ng-if="show_blocked == 1" ng-click="unblockUser(show_user_id)">Unblock</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end show user -->
+  <script src="dashboard.js"></script>
+  <script src="js/angular.min.js"></script>
+  <script src="js/sweetalert2.js"></script>
+  <!-- <script src="js/custom.js"></script> -->
+  <!-- JS, Popper.js, and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+    crossorigin="anonymous"></script>
+  <script>
+    var app = angular.module('admin', []);
+
+    app.controller('myCtrl', function ($scope, $http, $window) {
+
+
+      $scope.username = localStorage.getItem('username');
+
+      $scope.logout = () => {
+        // $scope.loggedin = false;
+        if (localStorage.getItem('username') != null) {
+          var removeUser = localStorage.removeItem('username');
+          // $window.location.href = "./dashboard/dash.html";
+        }
+        $window.location.href = "../api/logout.php";
+      }
+
+      // all users
+      $scope.getUsers = () => {
+        $http.get("../api/getUsers.php").then((Response) => {
+          $scope.users = Response.data;
+          // console.log(Response)
+        })
+      }
+
+      $scope.getUsers();
+
+      // show user details
+      $scope.showUser = (id) => {
+        $('#show_user').modal('show');
+        let show_user = {
+          method: 'POST',
+          url: '../api/showUser.php',
+          data: {
+            id: id
+          }
+        };
+        $http(show_user).then((res) => {
+          if (res.data == 'failed' || res.data == 'no details yet') {
+            Swal.fire({
+              text: res.data,
+              icon: 'warning'
+            });
+          } else {
+            data = res.data;
+            // console.log(data[0].fineness);
+            if (data[0].company == 'no') { $scope.show_company = 'No Company'; } else { $scope.show_company = data[0].company; }
+            $scope.show_province = data[0].province;
+            $scope.show_district = data[0].district;
+            $scope.show_sector = data[0].sector;
+            $scope.show_cell = data[0].cell;
+            $scope.show_village = data[0].village;
+            $scope.show_street = data[0].street;
+
+            $scope.show_username = data[0].username;
+            $scope.show_fname = data[0].Fname;
+            $scope.show_sname = data[0].Sname;
+            $scope.show_email = data[0].email;
+            $scope.show_created_at = data[0].created_at;
+            $scope.show_user_id = data[0].id;
+            $scope.show_phone = data[0].phone;
+            $scope.show_blocked = data[0].blocked;
+            // alert(product.product_name);
+          }
+        });
+      }
+
+      // block uesr
+      $scope.blockUser = (id) => {
+        if (id) {
+          Swal.fire({
+            title: 'Are you sure you want to block this user?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#00c292',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes!'
+          }).then((result) => {
+            if (result.value) {
+              $http({
+                method: 'POST',
+                url: '../api/blockUser.php',
+                data: {
+                  customer_id: id,
+                  action: 'block'
+                }
+              }).then((response) => {
+                if (response.data == "done") {
+                  Swal.fire({
+                    text: "User blocked!",
+                    icon: 'success'
+                  });
+                  $scope.getUsers();
+                  $scope.showUser(id);
+                } else {
+                  Swal.fire({
+                    text: response.data,
+                    icon: 'warning'
+                  });
+                }
+              });
+            }
+          });
+        }
+      }
+
+      // unblock user
+      $scope.unblockUser = (id) => {
+        if (id) {
+          Swal.fire({
+            title: 'Are you sure you want to unblock this user?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#00c292',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes!'
+          }).then((result) => {
+            if (result.value) {
+              $http({
+                method: 'POST',
+                url: '../api/blockUser.php',
+                data: {
+                  customer_id: id,
+                  action: 'unblock'
+                }
+              }).then((response) => {
+                if (response.data == "done") {
+                  Swal.fire({
+                    text: "User Unblocked!",
+                    icon: 'success'
+                  });
+                  $scope.getUsers();
+                  $scope.showUser(id);
+                } else {
+                  Swal.fire({
+                    text: response.data,
+                    icon: 'warning'
+                  });
+                }
+              });
+            }
+          });
+        }
+      }
+
+      // delete user
+      $scope.deleteUser = (id) => {
+        if (id) {
+          Swal.fire({
+            title: 'Are you sure you want to delete this user?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#00c292',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes!'
+          }).then((result) => {
+            if (result.value) {
+              $http({
+                method: 'POST',
+                url: '../api/deleteUser.php',
+                data: {
+                  customer_id: id,
+                }
+              }).then((response) => {
+                if (response.data == "done") {
+                  Swal.fire({
+                    text: "User deleted!",
+                    icon: 'success'
+                  });
+                  $scope.getUsers();
+                } else {
+                  Swal.fire({
+                    text: response.data,
+                    icon: 'warning'
+                  });
+                }
+              });
+            }
+          });
+        }
+      }
+    });
+
+  </script>
+</body>
+
+</html>
