@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KIKU DASHBOARD</title>
+  <!-- links -->
+  <link rel="stylesheet" href="dashboard.css">
+  <!-- CSS only -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+  <!-- font awesome -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+
+<body ng-app="admin" ng-controller="myCtrl">
+  <div class="content container-fluid">
+    <div class="row bg-dark">
+      <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12  side-navigation">
+        <div class="aside">
+          <!-- <h3>side</h3> -->
+          <nav class="side-nav">
+            <header>
+              <div class="profile">
+                <img src="../images/male-icon.png" alt="card-img-top" height="100" width="100">
+                <span class="text-light">{{username}}</span>
+                <div class="edit mx-auto">
+                  <span class="text-light"><a href="">Edit</a></span>
+                  <span class="text-light"><a href="" ng-click="logout()">Logout</a></span>
+                </div>
+              </div>
+            </header>
+
+            <ul class="side-nav-links">
+              <li><a href="dash.html">Dashboard</a></li>
+              <li><a href="products.html">Products</a></li>
+              <li><a href="orders.html"> Orders</a></li>
+              <li><a href="users.html"> Users</a></li>
+              <li><a href="reports.html" class="active"> Reports</a></li>
+              <li><a ng-click="logout()">Logout</a></li>
+            </ul>
+
+          </nav>
+        </div>
+      </div>
+      <div class="col-lg-10 col-md-10 col-sm-6 col-xs-12 bg-light">
+        <div class="  ">
+          <div class="row mt-3 mb-2">
+            <div class="col-md-9">
+              <h3>Dashboard</h3>
+            </div>
+            <div class="col-md-3">
+              <div aria-label="breadcrumb">
+                <ol class="breadcrumb ">
+                  <li class="breadcrumb-item "><a class="text-dark" href="dash.html">Dashboard</a></li>
+                  <li class="breadcrumb-item " aria-current="page">Reports</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+          <!-- content -->
+          <div class="report-params">
+            <div class="card">
+              <strong class="card-header">Reports</strong>
+              <div class="card-body">
+                <div class="report-type text-center">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-check ">
+                        <input class="form-check-input" type="radio" ng-model="report"
+                          ng-change="getReportParams(report)" name="exampleRadios" id="exampleRadios1"
+                          value="single_report" checked>
+                        <label class="form-check-label" for="exampleRadios1">
+                          <strong>Single Report</strong>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" ng-model="report"
+                          ng-change="getReportParams(report)" name="exampleRadios" id="exampleRadios2"
+                          value="interval_report">
+                        <label class="form-check-label" for="exampleRadios2">
+                          <strong>Date Interval Report</strong>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr>
+                <form ng-show="interval_report ">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <label for="">Start Date</label>
+                      <input type="date" class="form-control" name="start_date" ng-model="start_date" required>
+                    </div>
+                    <div class="col-md-3">
+                      <label for="">End Date</label>
+                      <input type="date" class="form-control" name="end_date" ng-model="end_date" required>
+                    </div>
+                    <div class="col-md-3">
+                      <label for="">Type</label>
+                      <select class="form-control" name="type" ng-model="type" ng-options="type for type in types"   required>
+                        <option value="">Type</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3">
+                      <label for="status">Status</label>
+                      <select class="form-control" id="status" name="status" ng-model="status"  required>
+                        <option value="all" >All</option>
+                        <option value="fulfilled">Fulfilled</option>
+                        <option value="unfulfilled">Unfulfilled</option>
+                        <option value="cancelled">Cancelled</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="action text-center mt-3">
+                    <button class="btn btn-grin" ng-click="showSingleReport()">Show Report</button>
+                    <button class="btn btn-light" ng-click="cancelReport()">Cancel</button>
+                  </div>
+                </form>
+                <form ng-show="single_report">
+                  <div class="row">
+                    <div class="col-md-6" ng-class="{'col-md-12':specific_date== false}">
+                      <div>
+                        <label for="">Type</label>
+                        <select class="form-control" name="type" ng-model="type" ng-options="type for type in types"
+                          required>
+                          <option value="">Type</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-6" ng-show="specific_date">
+                      <label for=""> Date</label>
+                      <input type="date" class="form-control" name="date" ng-model="date" required>
+                    </div>
+                  </div>
+                  <div class="action text-center mt-3">
+                    <button class="btn btn-grin" ng-click="showSingleReport(date,type)">Show Report</button>
+                    <button class="btn btn-light" ng-click="cancelReport(date,type)">Cancel</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- reports result -->
+          <!-- for products -->
+          <div class="for_products mt-3" ng-show="for_products">
+            <div class="card">
+              <div class="card-header">
+                <div class="row">
+                  <div class="col-md-9"><strong>{{report_type}}</strong></div>
+                  <div class="col-md-3"><button class="btn btn-blu text-light" ng-click="Export()">PDF</button></div>
+                </div>
+              </div>
+              <div class="card-body" id="product_report">
+                <div class="data_exist" ng-show="data_exist">
+                  <div class="table-responsive">
+                    <div class="report-head">
+                      <div class="row">
+                        <div class="col-md-8">
+                          <div class="logo">
+                            <img src="../images/logo/kiku.png" alt="" height="50" width="150"><br>
+                            <div class="ml-1">
+                              <span>KG700st. 12 Ave Masoro(Freezone)</span><br>
+                              <span>+250-700-111-222</span><br>
+                              <span>salessupport@kiku.com</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <strong class="float-right">{{curr_date}}</strong>
+                        </div>
+                      </div>
+                      <hr>
+                      <h3 class="text-center">All Products</h3>
+                    </div>
+                    <div class="product_table mt-5">
+                      <table class="table table-bordered table-striped table-hover mt-5 mb-3">
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>category</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr ng-repeat="product in product_report">
+                            <td>{{product.product_name}}</td>
+                            <td>{{product.quantity}}</td>
+                            <td>{{product.amount}}</td>
+                            <td ng-repeat="cat in categories" ng-if="product.category_id ==cat.id">{{cat.category_name}}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="data_empty" ng-show="data_empty">
+                  <div class="alert alert-dark">
+                    <span><strong class="text-dark">{{msg_for_empty}}</strong></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- for customers -->
+          <div class="for_products mt-3" ng-show="for_customers">
+            <div class="card">
+              <div class="card-header">
+                <div class="row">
+                  <div class="col-md-9"><strong>{{report_type}}</strong></div>
+                  <div class="col-md-3"><button class="btn btn-blu text-light" ng-click="Export()">PDF</button></div>
+                </div>
+              </div>
+              <div class="card-body" id="customer_report">
+                <div class="data_exist" ng-show="data_exist">
+                  <div class="table-responsive">
+                    <div class="report-head">
+                      <div class="row">
+                        <div class="col-md-8">
+                          <div class="logo">
+                            <img src="../images/logo/kiku.png" alt="" height="50" width="150"><br>
+                            <div class="ml-1">
+                              <span>KG700st. 12 Ave Masoro(Freezone)</span><br>
+                              <span>+250-700-111-222</span><br>
+                              <span>salessupport@kiku.com</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <strong class="float-right">{{curr_date}}</strong>
+                        </div>
+                      </div>
+                      <hr>
+                      <h3 class="text-center">All Customers</h3>
+                    </div>
+                    <div class="product_table mt-5">
+                      <table class="table table-bordered table-striped table-hover mt-5 mb-3">
+                        <thead>
+                          <tr>
+                            <th>Username</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr ng-repeat="customer in customer_report">
+                            <td>{{customer.username}}</td>
+                            <td>{{customer.Fname}}</td>
+                            <td>{{customer.Sname}}</td>
+                            <td>{{customer.email}}</td>
+                            <td>{{customer.phone}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="data_empty" ng-show="data_empty">
+                  <div class="alert alert-dark">
+                    <span><strong class="text-dark">{{msg_for_empty}}</strong></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="for_orders" ng-show="for_orders">
+            <div class="card mt-3">
+              <div class="card-header">
+                <div class="row">
+                  <div class="col-md-9"><strong>{{report_type}}</strong></div>
+                  <div class="col-md-3"><button class="btn btn-blu text-light" ng-click="Export()">PDF</button></div>
+                </div>
+              </div>
+              <div class="card-body" id="order_report">
+                <div class="report-head">
+                  <div class="row">
+                    <div class="col-md-8">
+                      <div class="logo">
+                        <img src="../images/logo/kiku.png" alt="" height="50" width="150"><br>
+                        <div class="ml-1">
+                          <span>KG700st. 12 Ave Masoro(Freezone)</span><br>
+                          <span>+250-700-111-222</span><br>
+                          <span>salessupport@kiku.com</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <strong class="float-right">{{curr_date}}</strong>
+                    </div>
+                  </div>                  
+                  <hr>
+                  <h3 class="text-center"><span class="text-capitalize">{{order_title}}</span> Orders</h3>
+                  <div class="from-to float-right " ng-show="from_to">
+                    From : <strong>{{from_date}}</strong>&nbsp; To : <strong>{{to_date}}</strong>
+                  </div>
+                </div>
+                <div class="all_order_report">
+                  <table class="table table-stripped table-bordered mt-3 mb-3">
+                    <thead>
+                      <tr>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody ng-repeat="order in order_report" class="mt-3">
+                      <div>
+                        <tr>
+                          <td>
+                            <div ng-repeat="pname in (order.product_name| customSplitString)">{{pname}}
+                              <hr>
+                            </div>
+                          </td>
+                          <td>
+                            <div ng-repeat="qty in (order.quantity| customSplitString)">{{qty}}
+                              <hr>
+                            </div>
+                          </td>
+                          <td>
+                            <div ng-repeat="amount in (order.amount| customSplitString)">
+                              {{amount | currency : value =""}}Rwf
+                              <hr>
+                            </div>
+                          </td>
+                          <td>
+                            <div ng-repeat="tot in (order.total| customSplitString)">{{tot | currency : value =""}}Rwf
+                              <hr>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="order-end" colspan="3">
+                            <!-- <strong>Delivery :
+                              {{order.shipping | currency : value =""}}Rwf
+                              /pkg</strong> -->
+                            <div class="row">
+                              <div class="col-md-8 ">
+                                <!-- <p class="float-left"> -->
+                                Order Number :<strong> 000{{order.id}}</strong> <br>
+                                Date Created:<strong> {{order.created_at}}</strong> <br>
+                                Customer :<strong> {{order.email}}</strong>
+                                <!-- </p> -->
+                              </div>
+                              <div class="col-md-4 ">
+                                <!-- <p class="float-right"> -->
+                                payment : <strong>{{order.payment}} (Cash On Delivery)</strong> <br>
+
+                                Status : <strong><span
+                                    ng-class="{'text-grin': order.status == 'fulfilled','text-warning': order.status == 'unfulfilled','text-danger': order.status == 'cancelled'}">{{order.status}}</span>
+                                </strong>
+                                <!-- </p> -->
+                              </div>
+                            </div>
+                          </td>
+                          <td class="order-end">
+                            <strong>Delivery :
+                              {{order.shipping | currency : value =""}}Rwf
+                              /pkg</strong><br>
+                            <strong>Grand Total: <span
+                                class="text-grin">{{order.grand_total | currency : value =""}}Rwf</span>
+                            </strong>
+                          </td>
+                        </tr>
+                      </div>
+                      <style>
+                        .order-end {
+                          border-bottom: 3px solid #00c292 !important;
+                        }
+                      </style>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- reports result -->
+
+          <!-- reports -->
+          <!-- <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+            </table>
+          </div> -->
+          <!-- end reports -->
+          <!-- end content -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+
+  </script>
+  <script src="js/angular.min.js"></script>
+  <!-- JS, Popper.js, and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+    crossorigin="anonymous"></script>
+  <!-- Kendo for pdf file -->
+  <script src="//kendo.cdn.telerik.com/2016.3.914/js/kendo.all.min.js"></script>
+
+  <script>
+    var app = angular.module('admin', []);
+
+    app.controller('myCtrl', function ($scope, $http, $window) {
+      $scope.Export = () => {
+        kendo.drawing.drawDOM($($scope.pdf_id), {
+          paperSize: "A4",
+          margin: "2cm",
+          landscape: true,
+          forcePageBreak: ".my-page-break",
+          repeatHeaders: true
+        }).then(function (group) {
+          kendo.drawing.pdf.saveAs(group, $scope.exported_file);
+        });
+      }
+
+      // todays data
+      var today = new Date();
+      $scope.curr_date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+
+      $scope.types = ['Products', 'Orders', 'Customers'];
+
+      $scope.username = localStorage.getItem('username');
+
+      $scope.logout = () => {
+        // $scope.loggedin = false;
+        if (localStorage.getItem('username') != null) {
+          var removeUser = localStorage.removeItem('username');
+          // $window.location.href = "./dashboard/dash.html";
+        }
+        $window.location.href = "../api/logout.php";
+      }
+
+      $scope.getReportParams = (choice) => {
+        if (choice == "single_report") {
+          $scope.single_report = true;
+          $scope.interval_report = false;
+        } else if (choice == "interval_report") {
+          $scope.single_report = false;
+          $scope.interval_report = true;
+          $scope.types = ['Orders'];
+          $scope.status = ['all','fulfilled','unfulfilled','cancelled'];
+        }
+      }
+
+      // product categories
+      $scope.getCategories = () => {
+        $http.get("../api/getCategories.php").then((Response) => {
+          $scope.categories = Response.data;
+        })
+      }
+
+      $scope.getCategories();
+
+      // show single report
+      $scope.for_orders = false;
+      $scope.for_products = false;
+      $scope.for_customers = false;
+      $scope.specific_date = false;
+      $scope.from_to = false;
+      $scope.showSingleReport = (date, type) => {
+        if (type == "Products" && $scope.report == "single_report") {
+          var new_date = new Date(date);
+          var date = new_date.getDate();
+          if (date < 10) { var nu_date = ("0" + new_date.getDate()).slice(-2); } else { var nu_date = new_date.getDate(); }
+          var month = new_date.getMonth() + 1; // Since getMonth() returns month from 0-11 not 1-12
+          if (month < 10) { var new_month = ("0" + (new_date.getMonth() + 1)).slice(-2); } else { var new_month = new_date.getMonth() + 1; }
+          var year = new_date.getFullYear();
+          var changed_date = year + "-" + new_month + "-" + nu_date;
+
+          $http({
+            method: 'POST',
+            url: '../api/getsinglereport.php',
+            data: {
+              for: type
+            }
+          }).then((res) => {
+            $scope.for_products = true;
+            $scope.for_orders = false;
+            $scope.for_customers = false;
+            $scope.from_to = false;
+            $scope.report_type = "Products Report";
+            $scope.pdf_id = "#product_report";
+            $scope.exported_file = 'products_report.pdf';
+            if (res.data != 'no data') {
+              $scope.data_exist = true;
+              $scope.data_empty = false;
+              $scope.product_report = res.data;
+            } else {
+              $scope.data_exist = false;
+              $scope.data_empty = true;
+              $scope.msg_for_empty = "Ooops! No Such Data Available."
+            }
+            // console.log(res.data);
+          });
+          // console.log(changed_date)
+        } else if (type == "Customers" && $scope.report == "single_report") {
+          $http({
+            method: 'POST',
+            url: '../api/getsinglereport.php',
+            data: {
+              for: type
+            }
+          }).then((res) => {
+            $scope.for_customers = true;
+            $scope.for_orders = false;
+            $scope.for_products = false;
+            $scope.from_to = false;
+            $scope.report_type = "Customers Report";
+            $scope.pdf_id = "#customer_report";
+            $scope.exported_file = 'customers_report.pdf'
+            if (res.data != 'no data') {
+              $scope.data_exist = true;
+              $scope.data_empty = false;
+              $scope.customer_report = res.data;
+            } else {
+              $scope.data_exist = false;
+              $scope.data_empty = true;
+              $scope.msg_for_empty = "Ooops! No Such Data Available."
+            }
+            // console.log(res.data);
+          });
+        } else if (type == "Orders" && $scope.report == "single_report") {
+          var new_date = new Date(date);
+          var date = new_date.getDate();
+          if (date < 10) { var nu_date = ("0" + new_date.getDate()).slice(-2); } else { var nu_date = new_date.getDate(); }
+          var month = new_date.getMonth() + 1; // Since getMonth() returns month from 0-11 not 1-12
+          if (month < 10) { var new_month = ("0" + (new_date.getMonth() + 1)).slice(-2); } else { var new_month = new_date.getMonth() + 1; }
+          var year = new_date.getFullYear();
+          var changed_date = year + "-" + new_month + "-" + nu_date;
+          $scope.order_title = "All";
+          $http({
+            method: 'POST',
+            url: '../api/getsinglereport.php',
+            data: {
+              for: type
+            }
+          }).then((res) => {
+            $scope.for_orders = true;
+            $scope.for_customers = false;
+            $scope.for_products = false;
+            $scope.from_to = false;
+            $scope.report_type = "Orders Report";
+            $scope.pdf_id = "#order_report";
+            $scope.exported_file = 'orders_report.pdf';
+            if (res.data != 'no data') {
+              $scope.data_exist = true;
+              $scope.data_empty = false;
+              // $scope.order_report = res.data;
+              var allReviews = res.data;
+              var reviewsByOrder = [];
+              allReviews.forEach(function (currReview) {
+                var currReviewIsForNewOrder = true;
+                reviewsByOrder.forEach(function (prevReviewsForThisOrder) {
+                  if (currReview.id === prevReviewsForThisOrder.id) {
+                    prevReviewsForThisOrder.product_name += ", " + currReview.product_name;
+                    prevReviewsForThisOrder.quantity += ", " + currReview.quantity;
+                    prevReviewsForThisOrder.amount += ", " + currReview.amount;
+                    prevReviewsForThisOrder.total += ", " + currReview.total;
+                    currReviewIsForNewOrder = false;
+                  }
+                });
+                if (currReviewIsForNewOrder) {
+                  reviewsByOrder.push(currReview);
+                }
+                $scope.order_report = reviewsByOrder;
+              });
+              // console.log($scope.order_report)
+            } else {
+              $scope.data_exist = false;
+              $scope.data_empty = true;
+              $scope.msg_for_empty = "Ooops! No Such Data Available."
+            }
+            // console.log(res.data);
+          });
+        } else if ($scope.type == "Orders" && $scope.report == "interval_report") {
+          var new_date = new Date($scope.start_date);
+          var date = new_date.getDate();
+          if (date < 10) { var nu_date = ("0" + new_date.getDate()).slice(-2); } else { var nu_date = new_date.getDate(); }
+          var month = new_date.getMonth() + 1; // Since getMonth() returns month from 0-11 not 1-12
+          if (month < 10) { var new_month = ("0" + (new_date.getMonth() + 1)).slice(-2); } else { var new_month = new_date.getMonth() + 1; }
+          var year = new_date.getFullYear();
+          var changed_start_date = year + "-" + new_month + "-" + nu_date;
+
+          var new_end_date = new Date($scope.end_date);
+          var date = new_end_date.getDate();
+          if (date < 10) { var nu_date = ("0" + new_end_date.getDate()).slice(-2); } else { var nu_date = new_end_date.getDate(); }
+          var month = new_end_date.getMonth() + 1; // Since getMonth() returns month from 0-11 not 1-12
+          if (month < 10) { var new_month = ("0" + (new_end_date.getMonth() + 1)).slice(-2); } else { var new_month = new_end_date.getMonth() + 1; }
+          var year = new_end_date.getFullYear();
+          var changed_end_date = year + "-" + new_month + "-" + nu_date;
+          $scope.from_date = changed_start_date;
+          $scope.to_date = changed_end_date;
+          if($scope.status == "all"){
+            $scope.order_title = "All";
+          }else {
+            $scope.order_title = $scope.status;
+          }
+          $http({
+            method: 'POST',
+            url: '../api/getsinglereport.php',
+            data: {
+              for: 'interval_order',
+              start_date : changed_start_date,
+              end_date : changed_end_date,
+              status : $scope.status
+            }
+          }).then((res) => {
+            $scope.for_orders = true;
+            $scope.for_customers = false;
+            $scope.for_products = false;
+            $scope.from_to = true;
+            $scope.report_type = "Orders Report";
+            $scope.pdf_id = "#order_report";
+            $scope.exported_file = 'orders_report.pdf';
+            if (res.data != 'no data') {
+              $scope.data_exist = true;
+              $scope.data_empty = false;
+              // $scope.order_report = res.data;
+              var allReviews = res.data;
+              var reviewsByOrder = [];
+              allReviews.forEach(function (currReview) {
+                var currReviewIsForNewOrder = true;
+                reviewsByOrder.forEach(function (prevReviewsForThisOrder) {
+                  if (currReview.id === prevReviewsForThisOrder.id) {
+                    prevReviewsForThisOrder.product_name += ", " + currReview.product_name;
+                    prevReviewsForThisOrder.quantity += ", " + currReview.quantity;
+                    prevReviewsForThisOrder.amount += ", " + currReview.amount;
+                    prevReviewsForThisOrder.total += ", " + currReview.total;
+                    currReviewIsForNewOrder = false;
+                  }
+                });
+                if (currReviewIsForNewOrder) {
+                  reviewsByOrder.push(currReview);
+                }
+                $scope.order_report = reviewsByOrder;
+              });
+              console.log($scope.order_report)
+            } else {
+              $scope.data_exist = false;
+              $scope.data_empty = true;
+              $scope.msg_for_empty = "Ooops! No Such Data Available."
+            }
+            // console.log(res.data);
+          });
+          // console.log(changed_start_date ,changed_end_date,$scope.type)
+        }
+        
+      }
+
+      // cancel report
+      $scope.cancelReport = (date, type) => {
+        $scope.date = '';
+        $scope.type = '';
+      }
+    });
+
+    // convert comma separated string to array
+    app.filter('customSplitString', function () {
+      return function (input) {
+        var arr = input.split(',');
+        return arr;
+      };
+    });
+  </script>
+
+</body>
+
+</html>
