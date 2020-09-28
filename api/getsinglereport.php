@@ -32,8 +32,14 @@
         echo "no data";
       }
   }elseif($info->for == 'Orders') {
-    $get_info = "select o.id,o.grand_total,o.status,o.payment,o.created_at,od.amount,od.quantity,od.total,od.shipping, p.product_name,c.email from orders as o join order_details as od on od.order_id = o.id join products as p on p.id = od.product_id join customers as c on c.id = o.customer_id ";
-    $get_info_res = mysqli_query($conn,$get_info);    
+    if($info->status  == 'all'){
+      $get_info = "select o.id,o.grand_total,o.status,o.payment,o.created_at,od.amount,od.quantity,od.total,od.shipping, p.product_name,c.email from orders as o join order_details as od on od.order_id = o.id join products as p on p.id = od.product_id join customers as c on c.id = o.customer_id ";
+      $get_info_res = mysqli_query($conn,$get_info); 
+    }else{
+      $status = $info->status;
+      $get_info = "select o.id,o.grand_total,o.status,o.payment,o.created_at,od.amount,od.quantity,od.total,od.shipping, p.product_name,c.email from orders as o join order_details as od on od.order_id = o.id join products as p on p.id = od.product_id join customers as c on c.id = o.customer_id where o.status = '$status' ";
+      $get_info_res = mysqli_query($conn,$get_info); 
+    }       
     
       if(mysqli_num_rows($get_info_res)!=0){
         if($get_info_res){

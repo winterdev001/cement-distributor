@@ -13,6 +13,15 @@
 
   <!-- font awesome -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    table>tbody {
+      font-size: 14px !important;
+    }
+
+    .grid tbody {
+      font-size: 8px !important;
+    }
+  </style>
 
 </head>
 
@@ -103,14 +112,15 @@
                     </div>
                     <div class="col-md-3">
                       <label for="">Type</label>
-                      <select class="form-control" name="type" ng-model="type" ng-options="type for type in types"   required>
+                      <select class="form-control" name="type" ng-model="type" ng-options="type for type in types"
+                        required>
                         <option value="">Type</option>
                       </select>
                     </div>
                     <div class="col-md-3">
                       <label for="status">Status</label>
-                      <select class="form-control" id="status" name="status" ng-model="status"  required>
-                        <option value="all" >All</option>
+                      <select class="form-control" id="status" name="status" ng-model="status" required>
+                        <option value="all">All</option>
                         <option value="fulfilled">Fulfilled</option>
                         <option value="unfulfilled">Unfulfilled</option>
                         <option value="cancelled">Cancelled</option>
@@ -127,15 +137,20 @@
                     <div class="col-md-6" ng-class="{'col-md-12':specific_date== false}">
                       <div>
                         <label for="">Type</label>
-                        <select class="form-control" name="type" ng-model="type" ng-options="type for type in types"
-                          required>
+                        <select class="form-control" name="type" ng-model="type" ng-change="getTypeInput()"
+                          ng-options="type for type in types" required>
                           <option value="">Type</option>
                         </select>
                       </div>
                     </div>
                     <div class="col-md-6" ng-show="specific_date">
-                      <label for=""> Date</label>
-                      <input type="date" class="form-control" name="date" ng-model="date" required>
+                      <label for="status">Status</label>
+                      <select class="form-control" id="status" name="status" ng-model="status" required>
+                        <option value="all">All</option>
+                        <option value="fulfilled">Fulfilled</option>
+                        <option value="unfulfilled">Unfulfilled</option>
+                        <option value="cancelled">Cancelled</option>
+                      </select>
                     </div>
                   </div>
                   <div class="action text-center mt-3">
@@ -297,7 +312,7 @@
                     <div class="col-md-4">
                       <strong class="float-right">{{curr_date}}</strong>
                     </div>
-                  </div>                  
+                  </div>
                   <hr>
                   <h3 class="text-center"><span class="text-capitalize">{{order_title}}</span> Orders</h3>
                   <div class="from-to float-right " ng-show="from_to">
@@ -423,8 +438,10 @@
           paperSize: "A4",
           margin: "2cm",
           landscape: true,
+          fontSize : "14px",
           forcePageBreak: ".my-page-break",
-          repeatHeaders: true
+          repeatHeaders: true,
+          pageable: true
         }).then(function (group) {
           kendo.drawing.pdf.saveAs(group, $scope.exported_file);
         });
@@ -451,11 +468,22 @@
         if (choice == "single_report") {
           $scope.single_report = true;
           $scope.interval_report = false;
+          $scope.types = ['Products', 'Orders', 'Customers'];
         } else if (choice == "interval_report") {
           $scope.single_report = false;
           $scope.interval_report = true;
           $scope.types = ['Orders'];
-          $scope.status = ['all','fulfilled','unfulfilled','cancelled'];
+          $scope.status = ['all', 'fulfilled', 'unfulfilled', 'cancelled'];
+        } else {
+          $scope.types = ['Products', 'Orders', 'Customers'];
+        }
+      }
+
+      $scope.getTypeInput = () => {
+        if ($scope.type == "Orders") {
+          $scope.specific_date = true;
+        } else {
+          $scope.specific_date = false;
         }
       }
 
@@ -545,11 +573,14 @@
           var year = new_date.getFullYear();
           var changed_date = year + "-" + new_month + "-" + nu_date;
           $scope.order_title = "All";
+          if ($scope.status == undefined) { var status = "all"; } else { var status = $scope.status; }
+          // console.log(status)
           $http({
             method: 'POST',
             url: '../api/getsinglereport.php',
             data: {
-              for: type
+              for: type,
+              status: status
             }
           }).then((res) => {
             $scope.for_orders = true;
@@ -607,9 +638,9 @@
           var changed_end_date = year + "-" + new_month + "-" + nu_date;
           $scope.from_date = changed_start_date;
           $scope.to_date = changed_end_date;
-          if($scope.status == "all"){
+          if ($scope.status == "all") {
             $scope.order_title = "All";
-          }else {
+          } else {
             $scope.order_title = $scope.status;
           }
           $http({
@@ -617,9 +648,9 @@
             url: '../api/getsinglereport.php',
             data: {
               for: 'interval_order',
-              start_date : changed_start_date,
-              end_date : changed_end_date,
-              status : $scope.status
+              start_date: changed_start_date,
+              end_date: changed_end_date,
+              status: $scope.status
             }
           }).then((res) => {
             $scope.for_orders = true;
@@ -661,7 +692,7 @@
           });
           // console.log(changed_start_date ,changed_end_date,$scope.type)
         }
-        
+
       }
 
       // cancel report
