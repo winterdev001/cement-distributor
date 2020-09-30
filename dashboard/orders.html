@@ -39,9 +39,10 @@
             <ul class="side-nav-links">
               <li><a href="dash.html">Dashboard</a></li>
               <li><a href="products.html">Products</a></li>
-              <li><a href="orders.html" class="active" > Orders</a></li>
-              <li><a href="users.html"  > Users</a></li>
-              <li><a href="reports.html" > Reports</a></li>
+              <li><a href="orders.html" class="active"> Orders</a></li>
+              <li><a href="users.html"> Users</a></li>
+              <li><a href="messages.html"> Inquiries</a></li>
+              <li><a href="reports.html"> Reports</a></li>
               <li><a ng-click="logout()">Logout</a></li>
             </ul>
 
@@ -75,7 +76,8 @@
                         <div class="search ">
                           <div class="float-right">
                             <form action="">
-                              <input type="text" ng-model="search_in_unfulfilled" class="form-control dash-search" placeholder="Search...">
+                              <input type="text" ng-model="search_in_unfulfilled" class="form-control dash-search"
+                                placeholder="Search...">
                             </form>
                           </div>
                         </div>
@@ -139,7 +141,8 @@
                         <div class="search ">
                           <div class="float-right">
                             <form action="">
-                              <input type="text" ng-model="search_in_fulfilled" class="form-control dash-search" placeholder="Search...">
+                              <input type="text" ng-model="search_in_fulfilled" class="form-control dash-search"
+                                placeholder="Search...">
                             </form>
                           </div>
                         </div>
@@ -177,6 +180,7 @@
                             </td>
                             <td>
                               <button class="btn btn-blu text-light" ng-click="showOrder(order)">View</button>
+                              <button class="btn btn-warning" ng-click="makeReceipt(order)">Invoice</button>
                               <button class="btn btn-danger" ng-click="deleteOrder(order.id)">Delete</button>
                             </td>
                           </tr>
@@ -202,7 +206,8 @@
                         <div class="search ">
                           <div class="float-right">
                             <form action="">
-                              <input type="text" ng-model="search_in_cancelled" class="form-control dash-search" placeholder="Search...">
+                              <input type="text" ng-model="search_in_cancelled" class="form-control dash-search"
+                                placeholder="Search...">
                             </form>
                           </div>
                         </div>
@@ -366,6 +371,116 @@
       </div>
     </div>
   </div>
+
+  <!-- make invoice -->
+  <div class="modal fade" id="make_invoice" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Invoice Details</h5>
+
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="full_invoice" style="font-size: 13px;">
+          <div class="invoice-header">
+            <div class="row">
+              <div class="col-md-8">
+                <div class="logo">
+                  <img src="../images/logo/kiku.png" alt="" height="40" width="120"><br>
+                  <div class="ml-1 mt-2">
+                    <span><strong>From : </strong></span>
+                    <span>KG700st. 12 Ave Masoro(Freezone)</span><br>
+                    <span>+250-700-111-222</span><br>
+                    <span>salessupport@kiku.com</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="float-right">
+                  <span><strong>Invoice</strong></span> <br>
+                  <span>{{curr_date}}</span> <br>
+                  <div class="mt-2"><span><strong>To :</strong></span>
+                    <span ng-if="invoice_company != 'no'"> <strong>{{invoice_company}}</strong></span> <br>
+                    <span>{{invoice_user_names}}</span> <br>
+                    <span class="text-muted">{{invoice_street}}, {{invoice_village}}, {{invoice_cell}},<br>
+                      {{invoice_sector}}, {{invoice_district}}, <br>
+                       {{invoice_province}}</span>, <br>
+                    <span class="text-muted">{{invoice_country}}</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="invoice-body">
+            <div class="row">
+              <div class="col-md-2 mx-auto mt-2">
+                <span><strong>Invoice#</strong></span><br>
+                <span>000{{orderz_id}}</span>
+              </div>
+              <div class="col-md-10 mx-auto">
+                <table class="table table-bordered table-stripped mt-3 mb-3">
+                  <thead>
+                    <tr>
+                      <th>Product Name</th>
+                      <th>Quantity</th>
+                      <th>Price</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="order-end">
+                        <div ng-repeat="pname in orderz_product_name">{{pname}}
+                          <hr>
+                        </div>
+                      </td>
+                      <td class="order-end">
+                        <div ng-repeat="qty in orderz_quantity">{{qty}}
+                          <hr>
+                        </div>
+                      </td>
+                      <td class="order-end">
+                        <div ng-repeat="amount in orderz_amount">{{amount | currency : value =""}}Rwf
+                          <hr>
+                        </div>
+                      </td>
+                      <td class="order-end">
+                        <div ng-repeat="tot in orderz_total">{{tot | currency : value =""}}Rwf
+                          <hr>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="3" align="center"><strong>Delivery : {{orderz_delivery | currency : value =""}}Rwf
+                          /pkg</strong></td>
+                      <td> <strong>Grand Total: <span
+                            class="text-grin">{{grand_total | currency : value =""}}Rwf</span></strong></td>
+                    </tr>
+                    <style>
+                      .order-end {
+                        border-bottom: 3px solid #00c292 !important;
+                      }
+                    </style>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="invoice-footer mt-3">
+            <p class="modal-text">
+              <strong>Signature : <span> <input type="text" class="col-4"
+                    style="border: none;border-bottom: 1.5px solid rgb(46, 44, 44);"> </span></strong>
+            </p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-grin text-light" ng-click="printInvoice()">PDF</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- end modals -->
   <!-- <script src="dashboard.js"></script> -->
   <script src="js/angular.min.js"></script>
@@ -381,31 +496,26 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
     integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
     crossorigin="anonymous"></script>
+     <!-- Kendo for pdf file -->
+  <script src="//kendo.cdn.telerik.com/2016.3.914/js/kendo.all.min.js"></script>
   <script>
     var app = angular.module('admin', []);
 
     app.controller('myCtrl', function ($scope, $http, $window) {
 
-      // $scope.test = "this is it";
-      // $scope.getProducts = () => {
-      //   $http.get("../api/getProducts.php").then((Response) => {
-      //     $scope.products = Response.data;
-      //     // console.log(Response)
-      //   })
-      // }
-
-      // $scope.getProducts();
-
-      // $scope.get_admin_info = () => {
-      //   $http.get("../api/admininfo.php").then((Response) => {
-      //     data = Response.data;
-      //     $scope.admin_name = data[0].username;
-      //     // $scope.loggedin = 'gucci';
-      //     // console.log(Response.data);
-      //   })
-      // }
-      // $scope.get_admin_info();
-
+      $scope.printInvoice = () => {
+        kendo.drawing.drawDOM($("#full_invoice"), {
+          paperSize: "A4",
+          margin: "1cm",
+          landscape: true,
+          fontSize : "14px",
+          forcePageBreak: ".my-page-break",
+          repeatHeaders: true,
+          pageable: true
+        }).then(function (group) {
+          kendo.drawing.pdf.saveAs(group, "Invoice.pdf");
+        });
+      }
       $scope.username = localStorage.getItem('username');
 
       $scope.logout = () => {
@@ -605,6 +715,66 @@
             }
           })
         }
+      }
+
+      // make receipt
+      $scope.makeReceipt = (order) => {
+        // todays data
+        var today = new Date();
+        $scope.curr_date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+        $http({
+          method: 'POST',
+          url: '../api/getOrderDetails.php',
+          data: {
+            order_id: order.id
+          }
+        }).then((res) => {
+          var allReviews = res.data;
+          var reviewsByOrder = [];
+          allReviews.forEach(function (currReview) {
+            var currReviewIsForNewOrder = true;
+            reviewsByOrder.forEach(function (prevReviewsForThisOrder) {
+              if (currReview.id === prevReviewsForThisOrder.id) {
+                prevReviewsForThisOrder.product_name += ", " + currReview.product_name;
+                prevReviewsForThisOrder.quantity += ", " + currReview.quantity;
+                prevReviewsForThisOrder.amount += ", " + currReview.amount;
+                prevReviewsForThisOrder.total += ", " + currReview.total;
+                currReviewIsForNewOrder = false;
+              }
+            });
+            if (currReviewIsForNewOrder) {
+              reviewsByOrder.push(currReview);
+            }
+          });
+          $scope.singleOrder = reviewsByOrder;
+          $('#make_invoice').modal('show');
+          $scope.orderz_id = order.id;
+          $scope.orderz_product_name = $scope.singleOrder[0].product_name.split(',');
+          $scope.orderz_quantity = $scope.singleOrder[0].quantity.split(',');
+          $scope.orderz_amount = $scope.singleOrder[0].amount.split(',');
+          $scope.orderz_total = $scope.singleOrder[0].total.split(',');
+          $scope.orderz_status = $scope.singleOrder[0].status;
+          $scope.orderz_delivery = $scope.singleOrder[0].shipping;
+          $scope.user_email = $scope.singleOrder[0].email;
+          $scope.grand_total = order.grand_total;
+          $scope.invoice_user_names = $scope.singleOrder[0].fname + " " + $scope.singleOrder[0].sname;
+          $http({
+            method: 'POST',
+            url: '../api/getCustomerDetails.php',
+            data: {
+              customer_name: $scope.singleOrder[0].username
+            }
+          }).then((response) => {
+            $scope.invoice_company = response.data[0].company;
+            $scope.invoice_street = response.data[0].street;
+            $scope.invoice_village = response.data[0].village;
+            $scope.invoice_cell = response.data[0].cell;
+            $scope.invoice_sector = response.data[0].sector;
+            $scope.invoice_district = response.data[0].district;
+            $scope.invoice_province = response.data[0].province;
+            $scope.invoice_country = response.data[0].country;
+          });
+        });
       }
     });   
   </script>

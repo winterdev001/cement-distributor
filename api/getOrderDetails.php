@@ -13,7 +13,7 @@
   // echo $selectedID;
   
   if($order_id){    
-    $get_details = "select o.id,o.grand_total,o.status,od.amount,od.quantity,od.total,od.shipping, p.product_name,c.email from orders as o join order_details as od on od.order_id = o.id join products as p on p.id = od.product_id join customers as c on c.id = o.customer_id where od.order_id = $order_id  ";
+    $get_details = "select o.id,o.grand_total,o.status,od.amount,od.quantity,od.total,od.shipping, p.product_name,c.email,c.fname,c.sname,c.username from orders as o join order_details as od on od.order_id = o.id join products as p on p.id = od.product_id join customers as c on c.id = o.customer_id where od.order_id = $order_id  ";
 
     $get_details_res = mysqli_query($conn,$get_details);
     

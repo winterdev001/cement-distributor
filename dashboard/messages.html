@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KIKU DASHBOARD</title>
+  <!-- links -->
+  <link rel="stylesheet" href="dashboard.css">
+  <!-- CSS only -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+</head>
+
+<body ng-app="admin" ng-controller="myCtrl">
+  <div class="content container-fluid">
+    <div class="row bg-dark">
+      <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12  side-navigation">
+        <div class="aside">
+          <!-- <h3>side</h3> -->
+          <nav class="side-nav">
+            <header>
+              <div class="profile">
+                <img src="../images/male-icon.png" alt="card-img-top" height="100" width="100">
+                <span class="text-light">{{username}}</span>
+                <div class="edit mx-auto">
+                  <span class="text-light"><a href="">Edit</a></span>
+                  <span class="text-light"><a href="" ng-click="logout()">Logout</a></span>
+                </div>
+              </div>
+            </header>
+
+            <ul class="side-nav-links">
+              <li><a href="dash.html">Dashboard</a></li>
+              <li><a href="products.html">Products</a></li>
+              <li><a href="orders.html"> Orders</a></li>
+              <li><a href="users.html"> Users</a></li>
+              <li><a href="messages.html" class="active"> Inquiries</a></li>
+              <li><a href="reports.html"> Reports</a></li>
+              <li><a ng-click="logout()">Logout</a></li>
+            </ul>
+
+          </nav>
+        </div>
+      </div>
+      <div class="col-lg-10 col-md-10 col-sm-6 col-xs-12 bg-light">
+        <div class="  ">
+          <div class="row mt-3 mb-2">
+            <div class="col-md-9">
+              <h3>Dashboard</h3>
+            </div>
+            <div class="col-md-3">
+              <div aria-label="breadcrumb">
+                <ol class="breadcrumb ">
+                  <li class="breadcrumb-item "><a class="text-dark" href="dash.html">Dashboard</a></li>
+                  <li class="breadcrumb-item " aria-current="page">Messages</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+          <!-- content -->
+          <div class="card">
+            <strong class="card-header">Inquiries</strong>
+            <div class="card-body">
+              <div ng-show="messages_exist">
+                <table class="table table-bordered  table-stripped">
+                  <thead>
+                    <th>Date</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                    <th></th>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="message in messages | orderBy :'-created_at'">
+                      <td>{{message.created_at}}</td>
+                      <td>{{message.username}}</td>
+                      <td>{{message.sender_email}}</td>
+                      <td>{{message.content | limitTo: 30}}...</td>
+                      <td>
+                        <span ng-if="message.status == 1" class="text-grin"><strong>Seen</strong></span>
+                        <span ng-if="message.status == 0" class="text-blu"><strong>Unseen</strong></span>
+                      </td>
+                      <td><button class="btn btn-blu text-light" ng-click="showMessage(message.id)">Read</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div ng-show="messages_empty">
+                <div class="alert alert-dark"><strong class="text-light">{{no_messages}}</strong></div>
+              </div>
+            </div>
+          </div>
+          <!-- end content -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- modals -->
+  <!-- show message modal -->
+  <div class="modal fade" id="show_message" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Inquiry Details</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p class="card-text">Sender Name : {{show_username}}</p>
+          <p class="card-text">Sender Email : {{show_email}}</p>
+          <p class="card-text">Status : <span
+              ng-class="{'text-grin':show_status== 'Seen','text-blu':show_status== 'Unseen'}"><strong>{{show_status}}</strong></span>
+          </p>
+          <p class="card-text">Created at : <strong class="text-muted">{{show_date}}</strong></p>
+          <p class="card-text">
+          <div style="border-left: 3px solid #00c292;padding:3px;">{{show_message}}</div>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-grin" ng-if="show_status=='Unseen'"
+            ng-click="checkMessage(show_id)">Check</button>
+          <button class="btn btn-danger " ng-click="deleteMessage(show_id)">Delete</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="getMessages()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <script src="dashboard.js"></script> -->
+  <script src="js/angular.min.js"></script>
+  <script src="js/sweetalert2.js"></script>
+  <!-- <script src="js/custom.js"></script> -->
+  <!-- JS, Popper.js, and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+    crossorigin="anonymous"></script>
+  <script>
+    var app = angular.module('admin', []);
+
+    app.controller('myCtrl', function ($scope, $http, $window) {
+
+      $scope.username = localStorage.getItem('username');
+
+      $scope.logout = () => {
+        // $scope.loggedin = false;
+        if (localStorage.getItem('username') != null) {
+          var removeUser = localStorage.removeItem('username');
+          // $window.location.href = "./dashboard/dash.html";
+        }
+        $window.location.href = "../api/logout.php";
+      }
+
+      // get messages
+      $scope.getMessages = () => {
+        $http.get('../api/getMessages.php').then((res) => {
+          if (res.data != 'no messages found') {
+            $scope.messages_exist = true;
+            $scope.messages_empty = false;
+            $scope.messages = res.data;
+          } else {
+            $scope.messages_exist = false;
+            $scope.messages_empty = true;
+            $scope.no_messages = res.data;
+          }
+          console.log(res.data)
+        });
+      }
+      $scope.getMessages();
+
+      // show messages
+      $scope.showMessage = (id) => {
+        $('#show_message').modal('show');
+        $http({
+          method: 'POST',
+          url: '../api/getsinglemessage.php',
+          data: {
+            mid: id
+          }
+        }).then((res) => {
+          if (res.data != 'failed') {
+            $scope.show_username = res.data[0].username;
+            $scope.show_email = res.data[0].sender_email;
+            $scope.show_message = res.data[0].content;
+            $scope.show_date = res.data[0].created_at;
+            $scope.show_id = res.data[0].id;
+            if (res.data[0].status == 0) {
+              $scope.show_status = 'Unseen';
+            } else {
+              $scope.show_status = 'Seen';
+            }
+          } else {
+            Swal.fire({
+              title: res.data,
+              icon: 'warning'
+            });
+          }
+        });
+      }
+      // check message
+      $scope.checkMessage = (id) => {
+        $http({
+          method: 'POST',
+          url: '../api/checkmessage.php',
+          data: {
+            mid: id
+          }
+        }).then((res) => {
+          if (res.data == 'done') {
+            Swal.fire({
+              title: 'Checked',
+              icon: 'success'
+            }).then((result) => {
+              if (result.value) {
+                $scope.showMessage(id);
+              } else {
+                $scope.showMessage(id);
+              }
+            });
+          } else {
+            Swal.fire({
+              title: res.data,
+              icon: 'warning'
+            });
+          }
+        });
+      }
+
+      // delete message
+      $scope.deleteMessage = (id) => {
+        if (id != null) {
+          Swal.fire({
+            title: 'Are you sure?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#00c292',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+            if (result.value) {
+              $http({
+                method: 'POST',
+                url: '../api/deletemessage.php',
+                data: {
+                  mid: id
+                }
+              }).then((res) => {
+                if (res.data == 'done') {
+                  Swal.fire({
+                    title: 'Deleted!',
+                    icon: 'success'
+                  }).then((result) => {
+                    if (result.value) {
+                      $scope.getMessages();
+                      $('#show_message').modal('hide');
+                    } else {
+                      $('#show_message').modal('hide');
+                      $scope.getMessages();
+                    }
+                  });
+                } else {
+                  Swal.fire({
+                    title: res.data,
+                    icon: 'warning'
+                  });
+                }
+              });
+            }
+          });
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

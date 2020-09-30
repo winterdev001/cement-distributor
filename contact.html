@@ -69,26 +69,56 @@
     <div class="contact-form-section d-flex justify-content-center">
       <div class="card mt-3 mb-5">
         <div class="card-body">
-          <form action="">
+          <form name="form" ng-show="isLoggedOut">
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <input type="text" placeholder="Name" class="form-control">
+                  <input type="text" placeholder="Name" ng-model="name" class="form-control">
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <input type="email" placeholder="Email" class="form-control">
+                  <input type="email" placeholder="Email" name="email" ng-model="email"
+                    ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" class="form-control">
+                  <div class="text-danger" ng-if="form.email.$dirty&&form.email.$error.pattern">*Enter correct Email
+                    Address!</div>
                 </div>
               </div>
               <div class="col-md-12">
                 <div class="form-group">
-                  <textarea name="" id="" rows="3" placeholder="Your messsage" class="form-control"></textarea>
+                  <textarea name="" id="" rows="3" placeholder="Your messsage" ng-model="message"
+                    class="form-control"></textarea>
                 </div>
               </div>
             </div>
             <div class="text-center">
-              <button class="btn third-color contact-btn text-light">Send</button>
+              <button class="btn third-color contact-btn text-light" ng-click="sendMessage()">Send</button>
+            </div>
+          </form>
+          <form  ng-show="isLoggedIn">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="name">Name</label>
+                  <input type="text" placeholder="Name" ng-model="name" class="form-control" readonly>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input type="email" placeholder="Email" name="email" ng-model="email" class="form-control" readonly>
+                  <!-- <div class="text-danger" ng-if="form.email.$dirty&&form.email.$error.pattern">*Enter correct Email Address!</div> -->
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="form-group">
+                  <textarea name="" id="" rows="3" placeholder="Your messsage" ng-model="message"
+                    class="form-control"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="text-center">
+              <button class="btn third-color contact-btn text-light" ng-click="sendMessage()">Send</button>
             </div>
           </form>
         </div>
@@ -156,6 +186,7 @@
     // /.back to top button
   </script>
   <script src="js/angular.min.js"></script>
+  <script src="js/sweetalert1.js"></script>
   <script>
     var app = angular.module('myApp', []);
     app.controller('myCtlr', function ($scope, $http, $window) {
@@ -225,6 +256,75 @@
           $window.location.href = 'product_details.html';
           var getId = localStorage.getItem('id');
           console.log(getId);
+        }
+      }
+
+      // check if logged in or not
+      // $scope.isLoggedIn = false;
+      // $scope.isLoggedOut = true;
+      $scope.userStatus = () => {
+        if (localStorage.getItem('username') != null) {
+          var username = localStorage.getItem('username');
+          $scope.isLoggedIn = true;
+          $scope.isLoggedOut = false;
+          $http({
+            method: 'POST',
+            url: 'api/customerdashdetails.php',
+            data: {
+              customer_name: username
+            }
+          }).then((res) => {
+            console.log(res.data)
+            $scope.name = res.data[0].username;
+            $scope.email = res.data[0].email;
+          });
+        } else {
+          $scope.isLoggedIn = false;
+          $scope.isLoggedOut = true;
+        }
+      }
+
+      $scope.userStatus();
+
+      // send message / inquiry      
+      $scope.sendMessage = () => {
+        if ($scope.name == null || $scope.email == null || $scope.message == null) {
+          swal({
+            title: "Fill all fields correctly first.",
+            icon: 'warning'
+          });
+        } else {
+          $http({
+            method: 'POST',
+            url : 'api/addMessage.php',
+            data: {
+              uname  : $scope.name,
+              email : $scope.email,
+              message : $scope.message
+            }
+          }).then((res)=>{
+            if(res.data == 'done'){
+              swal({
+                title: "Message sent successfully",
+                icon: 'success',
+                timer : 2500
+              }).then((result)=>{
+                if(result){
+                  $window.location.reload();
+                }else {
+                  $window.location.reload();
+                }
+              });              
+            }else {
+              swal({
+                title: res.data,
+                icon : 'warning'
+              });
+            }
+          });
+          // console.log($scope.name,
+          //   $scope.email,
+          //   $scope.message)
         }
       }
     });

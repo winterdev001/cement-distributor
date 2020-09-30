@@ -305,7 +305,10 @@
                 <div class="mt-3" ng-show="request_exist">
                   <div class="card mt-3" ng-repeat="request in requests">
                     <div class="card-body">
-                      <p class="card-text">{{request.content}}</p>
+                      <p class="card-text">{{request.content}}
+                         <span ng-if="request.status == 1" class="float-right text-green">Seen</span>
+                         <span ng-if="request.status == 0" class="float-right text-blu">Unseen</span>
+                      </p>                      
                     </div>
                   </div>
                 </div>
@@ -652,7 +655,7 @@
             $scope.request_is_empty = false;
             $scope.request_exist = true;
             $scope.all_requests = response.data.length;
-            $scope.requests = response.data;
+            $scope.requests = response.data;            
           }
         });
       }
