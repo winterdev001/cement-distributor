@@ -20,7 +20,8 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
     integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
     crossorigin="anonymous"></script>
-
+  <!-- font-awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
 
@@ -31,25 +32,27 @@
         <div class="aside">
           <!-- <h3>side</h3> -->
           <nav class="side-nav">
-            <header>              
+            <header>
               <div class="profile">
-                <img src="../images/male-icon.png" alt="card-img-top" height="100" width="100">
+                <span ng-if="profile != 'no'"><img ng-src="../images/{{profile}}" alt="card-img-top" height="100" width="100"></span>
+                <span ng-if="profile == 'no'"><img src="../images/male-icon.png" alt="card-img-top" height="100" width="100"></span>
                 <span class="text-light">{{username}}</span>
-                <div class="edit mx-auto">
-                  <span class="text-light"><a href="">Edit</a></span>
-                  <span class="text-light"><a href="" ng-click="logout()">Logout</a></span>
+                <div class="edit mt-2 p-1">
+                  <span><a class="text-light text-center btn btn-grin text-decoration-none" href="edit_profile.html"> <i
+                        class="fa fa-pencil fa-fw"></i> Edit</a></span>
                 </div>
               </div>
             </header>
+            <hr>
 
             <ul class="side-nav-links">
-              <li><a href="dash.html">Dashboard</a></li>
-              <li><a href="products.html" class="active">Products</a></li>
-              <li><a href="orders.html" >Orders</a></li>
-              <li><a href="users.html"  > Users</a></li>
-              <li><a href="messages.html" > Inquiries</a></li>
-              <li><a href="reports.html" > Reports</a></li>
-              <li><a ng-click="logout()">Logout</a></li>
+              <li><a href="dash.html" ><i class="fa fa-home fa-fw"></i> Dashboard</a></li>
+              <li><a href="products.html" class="active"><i class="fa fa-archive fa-fw"></i> Products</a></li>
+              <li><a href="orders.html" ><i class="fa fa-calendar-check-o fa-fw"></i> Orders</a></li>
+              <li><a href="users.html"><i class="fa fa-users fa-fw"></i> Users</a></li>
+              <li><a href="messages.html"><i class="fa fa-envelope fa-fw"></i> Inquiries</a></li>
+              <li><a href="reports.html"><i class="fa fa-file-text fa-fw"></i> Reports</a></li>
+              <li><a ng-click="logout()"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
             </ul>
 
           </nav>
@@ -587,7 +590,7 @@
   <script src="js/sweetalert2.js"></script>
   <script>
     var app = angular.module('dash', []);
-    app.controller('dashController', function ($scope, $http, $window) {
+    app.controller('dashController', function ($scope, $http, $window) {      
 
       $scope.products = [];
       $scope.colors = ['grey', 'dark', 'white', 'brown'];
@@ -854,6 +857,22 @@
       $scope.getCategories();
 
       $scope.username = localStorage.getItem('username');
+      // get admin info
+      $scope.getAdminInfo = () => {
+        $http({
+          method: 'POST',
+          url: '../api/getadmininfo.php',
+          data: {
+            username: $scope.username
+          }
+        }).then((res) => {
+          $scope.password = res.data[0].password;
+          $scope.profile = res.data[0].image;
+          $scope.admin_id = res.data[0].id;
+          console.log(res.data);
+        });
+      }
+      $scope.getAdminInfo();
 
       $scope.logout = () => {
         // $scope.loggedin = false;
